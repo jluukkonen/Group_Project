@@ -19,7 +19,7 @@
   }
 
   .hud-glass {
-    @apply bg-black/40 backdrop-blur-md border border-white/10 shadow-[0_0_15px_rgba(0,0,0,0.5)];
+    @apply bg-black/20 backdrop-blur-sm border border-white/10;
   }
 
   .hud-border-crimson {

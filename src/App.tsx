@@ -801,8 +801,8 @@ export default function App() {
         </div>
       </div>
 
-      {/* COMPANY LEGEND HUD (Bottom Left Overlay) */}
-      <HUDBox className="absolute bottom-6 left-[304px] z-10 min-w-[240px]" title={viewMode === 'global' ? "TEAMS" : "ASSETS"}>
+      {/* COMPANY LEGEND HUD (Bottom Right Overlay) */}
+      <HUDBox className="absolute bottom-6 right-6 z-10 min-w-[200px]" title={viewMode === 'global' ? "TEAMS" : "ASSETS"}>
         {viewMode === 'global' ? (
           <div className="flex flex-col gap-3">
             {teamNodes.map((team, idx) => (
@@ -855,16 +855,8 @@ export default function App() {
       </HUDBox>
 
       {/* NODE TELEMETRY HUD (Top Left Overlay) */}
-      <HUDBox className="absolute top-6 left-[304px] z-10 w-[280px]" title="TELEMETRY">
-        {!hoverInfo ? (
-          <div className="h-[140px] flex items-center justify-center flex-col gap-3 text-white/20">
-            <div className="w-12 h-12 flex items-center justify-center border border-white/5 rounded-full relative">
-              <div className="absolute inset-0 border border-[#BC002D]/20 rounded-full animate-ping" />
-              <div className="w-1.5 h-1.5 bg-[#BC002D]/40 rounded-full" />
-            </div>
-            <div className="text-[9px] uppercase tracking-[2.5px] animate-pulse">Awaiting Object Lock</div>
-          </div>
-        ) : (
+      {hoverInfo && (
+        <HUDBox className="absolute top-6 left-[304px] z-10 w-[280px]" title="TELEMETRY">
           <div className="animate-in fade-in slide-in-from-left-2 duration-300">
             <div className="flex items-baseline justify-between mb-1">
               <div className="font-black text-[18px] uppercase tracking-[2px] text-white">
@@ -939,8 +931,8 @@ export default function App() {
               </div>
             )}
           </div>
-        )}
-      </HUDBox>
+        </HUDBox>
+      )}
     </div>
   );
 }
