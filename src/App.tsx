@@ -801,58 +801,54 @@ export default function App() {
         </div>
       </div>
 
-      {/* COMPANY LEGEND HUD (Bottom Right Overlay) */}
-      <HUDBox className="absolute bottom-6 right-6 z-10 min-w-[200px]" title={viewMode === 'global' ? "TEAMS" : "ASSETS"}>
+      {/* MINIMALIST LEGEND STRIP (Bottom Center) */}
+      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 hud-glass px-6 py-2 rounded-[2px] flex items-center gap-8 glossy-gradient border border-white/5 shadow-2xl">
         {viewMode === 'global' ? (
-          <div className="flex flex-col gap-3">
+          <div className="flex items-center gap-6">
             {teamNodes.map((team, idx) => (
-              <div key={idx} className="flex items-center gap-3">
+              <div key={idx} className="flex items-center gap-2">
                 <div 
-                  className="w-2.5 h-2.5 rounded-sm border" 
+                  className="w-2 h-2 rounded-full" 
                   style={{ 
-                    borderColor: `rgb(${team.color.join(',')})`, 
-                    backgroundColor: `rgba(${team.color.join(',')}, 0.2)`,
-                    boxShadow: team.assignee !== 'UNASSIGNED' ? `0 0 10px rgba(${team.color.join(',')}, 0.4)` : 'none'
+                    backgroundColor: team.assignee !== 'UNASSIGNED' ? `rgb(${team.color.join(',')})` : '#333',
+                    boxShadow: team.assignee !== 'UNASSIGNED' ? `0 0 8px rgba(${team.color.join(',')}, 0.5)` : 'none'
                   }} 
                 />
-                <span className="text-[10px] uppercase tracking-[1.5px]" style={{ color: team.assignee !== 'UNASSIGNED' ? `rgb(${team.color.join(',')})` : '#555' }}>
-                  {team.continent}: {team.assignee}
+                <span className="text-[9px] uppercase tracking-[1px] text-white/50">
+                  {team.continent}: <span className={team.assignee !== 'UNASSIGNED' ? 'text-white' : 'text-white/20'}>{team.assignee}</span>
                 </span>
               </div>
             ))}
           </div>
         ) : (
-          <>
-            <div className="flex flex-col gap-3">
-                <div className="flex items-center gap-4">
-                    <div className="w-10 h-1 bg-[#BC002D] shadow-[0_0_8px_#BC002D]" />
-                    <span className="text-[10px] uppercase tracking-[1.5px] text-white/80">ENEOS CORP.</span>
+          <div className="flex items-center gap-8">
+            <div className="flex items-center gap-6 border-r border-white/10 pr-6">
+                <div className="flex items-center gap-2">
+                    <div className="w-4 h-0.5 bg-[#BC002D]" />
+                    <span className="text-[9px] uppercase tracking-[1px] text-white/60">ENEOS</span>
                 </div>
-                <div className="flex items-center gap-4">
-                    <div className="w-10 h-1 bg-[#00C9A7] shadow-[0_0_8px_#00C9A7]" />
-                    <span className="text-[10px] uppercase tracking-[1.5px] text-white/80">IDEMITSU KOSAN</span>
+                <div className="flex items-center gap-2">
+                    <div className="w-4 h-0.5 bg-[#00C9A7]" />
+                    <span className="text-[9px] uppercase tracking-[1px] text-white/60">IDEMITSU</span>
                 </div>
-                <div className="flex items-center gap-4">
-                    <div className="w-10 h-1 bg-[#FFB800] shadow-[0_0_8px_#FFB800]" />
-                    <span className="text-[10px] uppercase tracking-[1.5px] text-white/80">COSMO ENERGY</span>
+                <div className="flex items-center gap-2">
+                    <div className="w-4 h-0.5 bg-[#FFB800]" />
+                    <span className="text-[9px] uppercase tracking-[1px] text-white/60">COSMO</span>
                 </div>
             </div>
-            <div className="h-px bg-white/5 my-4" />
-            <div className="flex flex-col gap-2.5">
-              <div className="flex items-center gap-3">
-                  <div className="w-3 h-3 border border-white/40 rotate-45 flex items-center justify-center">
-                    <div className="w-1 h-1 bg-white/10" />
-                  </div>
-                  <span className="text-[9px] uppercase tracking-[1px] text-white/40">Primary Refinery Hub</span>
+            <div className="flex items-center gap-6">
+              <div className="flex items-center gap-2">
+                  <div className="w-2.5 h-2.5 border border-white/40 rotate-45" />
+                  <span className="text-[9px] uppercase tracking-[1px] text-white/40">Refinery</span>
               </div>
-              <div className="flex items-center gap-3">
-                  <div className="w-3 h-3 border border-white/40 rounded-full" />
-                  <span className="text-[9px] uppercase tracking-[1px] text-white/40">Logistics Terminal</span>
+              <div className="flex items-center gap-2">
+                  <div className="w-2.5 h-2.5 border border-white/40 rounded-full" />
+                  <span className="text-[9px] uppercase tracking-[1px] text-white/40">Terminal</span>
               </div>
             </div>
-          </>
+          </div>
         )}
-      </HUDBox>
+      </div>
 
       {/* NODE TELEMETRY HUD (Top Left Overlay) */}
       {hoverInfo && (
