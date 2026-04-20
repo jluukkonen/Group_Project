@@ -367,6 +367,13 @@ export default function App() {
   const [draggingSource, setDraggingSource] = useState<string | null>(null);
   const [mousePos, setMousePos] = useState<[number, number] | null>(null);
 
+  const currentImports = useMemo(() => {
+      return viewMode === 'japan' ? JP_IMPORT_EDGES : 
+             viewMode === 'korea' ? SK_IMPORT_EDGES : 
+             viewMode === 'china' ? CN_IMPORT_EDGES : 
+             viewMode === 'taiwan' ? TW_IMPORT_EDGES : [];
+  }, [viewMode]);
+
   const goToHub = (hub: 'japan' | 'korea' | 'china' | 'taiwan' | 'northkorea') => {
     setViewMode(hub);
     setHoverInfo(null);
@@ -532,11 +539,6 @@ export default function App() {
        return connected;
     }
 
-    const currentImports = viewMode === 'japan' ? JP_IMPORT_EDGES : 
-                          viewMode === 'korea' ? SK_IMPORT_EDGES : 
-                          viewMode === 'china' ? CN_IMPORT_EDGES : 
-                          viewMode === 'taiwan' ? TW_IMPORT_EDGES : [];
-
     if (!hoveredNode) return new Set(nodes.map((n) => n.name));
     const connected = new Set<string>();
     connected.add(hoveredNode);
@@ -551,7 +553,7 @@ export default function App() {
       if (e.source === hoveredNode) connected.add(e.target);
     });
     return connected;
-  }, [hoveredNode, nodes, edges, viewMode, globalNodes, globalEdges]);
+  }, [hoveredNode, nodes, edges, viewMode, globalNodes, globalEdges, currentImports]);
 
   // Pre-compute geometric paths for internal routes
   const internalPaths = useMemo(() => {
@@ -696,7 +698,7 @@ export default function App() {
     // LAYER 1: IMPORT RIVERS (Bottom — Background context)
     new ArcLayer({
       id: 'import-rivers',
-      data: IMPORT_EDGES,
+      data: currentImports,
       getSourcePosition: (d: any) => IMPORT_SOURCES[d.source],
       getTargetPosition: (d: any) => LOCATIONS[d.target],
       getSourceColor: [139, 0, 0, 50],
@@ -713,7 +715,7 @@ export default function App() {
     // LAYER 2: IMPORT RIVERS HIGHLIGHT
     new ArcLayer({
       id: 'import-rivers-highlight',
-      data: IMPORT_EDGES.filter(d => d.target === hoveredNode),
+      data: currentImports.filter((d: any) => d.target === hoveredNode),
       getSourcePosition: (d: any) => IMPORT_SOURCES[d.source],
       getTargetPosition: (d: any) => LOCATIONS[d.target],
       getSourceColor: [139, 0, 0, 180],
@@ -1149,8 +1151,8 @@ export default function App() {
                     <span className="text-white/30">Transfer Volume</span>
                     <span className="text-white font-bold">LV. {
                       IMPORT_SOURCES[hoverInfo.name] 
-                        ? IMPORT_EDGES.find(e => e.source === hoverInfo.name)?.weight 
-                        : EXPORT_EDGES.find(e => e.target === hoverInfo.name)?.weight
+                        ? currentImports.find((e: any) => e.source === hoverInfo.name)?.weight 
+                        : EXPORT_EDGES.find((e: any) => e.target === hoverInfo.name)?.weight
                     }</span>
                   </div>
                   <div className="h-0.5 bg-white/10 w-full" />
