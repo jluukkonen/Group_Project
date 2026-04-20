@@ -1,7 +1,7 @@
 export const TEAM_ASSIGNMENTS = {
   "Asia": {
-    assignee: "UNASSIGNED",
-    color: [80, 80, 80], // RGB format [R, G, B]
+    assignee: "JOONAS L.",
+    color: [255, 170, 0], // RGB format [R, G, B]
     centroid: [90.0, 45.0], // [Longitude, Latitude]
     radius: 5000000 // Radar radius in meters
   },
