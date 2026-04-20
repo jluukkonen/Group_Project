@@ -10,6 +10,7 @@ import { TEAM_ASSIGNMENTS } from './team_config';
 // --- DATA DEFINITIONS ---
 
 const LOCATIONS: Record<string, [number, number]> = {
+  // JAPAN
   Chiba: [140.12, 35.60],
   Kawasaki: [139.75, 35.53],
   Negishi: [139.63, 35.41],
@@ -25,6 +26,29 @@ const LOCATIONS: Record<string, [number, number]> = {
   Kagoshima: [130.56, 31.57],
   Okinawa: [127.75, 26.23],
   Miyako: [125.28, 24.80],
+  
+  // SOUTH KOREA
+  Ulsan: [129.35, 35.54],
+  Yeosu: [127.73, 34.75],
+  Onsan: [129.34, 35.43],
+  Daesan: [126.42, 36.97],
+  Incheon: [126.60, 37.47],
+
+  // MAINLAND CHINA
+  Shanghai: [121.47, 31.23],
+  Ningbo: [121.85, 29.89],
+  Tianjin: [117.20, 39.13],
+  Huizhou: [114.41, 23.11],
+
+  // TAIWAN
+  Kaohsiung: [120.35, 22.53],
+  Taoyuan: [121.31, 25.03],
+  Mailiao: [120.19, 23.79],
+
+  // NORTH KOREA
+  Nampo: [125.40, 38.73],
+  Sinuiju: [124.39, 40.10],
+  Wonsan: [127.44, 39.15],
 };
 
 const IMPORT_SOURCES: Record<string, [number, number]> = {
@@ -42,23 +66,62 @@ const EXPORT_DESTINATIONS: Record<string, [number, number]> = {
   'Incheon': [126.63, 37.45],
 };
 
-const REFINERIES = ['Chiba', 'Kawasaki', 'Negishi', 'Sakai', 'Aichi', 'Mizushima', 'Niigata'];
+const JP_REFINERIES = ['Chiba', 'Kawasaki', 'Negishi', 'Sakai', 'Aichi', 'Mizushima', 'Niigata'];
+const SK_REFINERIES = ['Ulsan', 'Yeosu', 'Onsan', 'Daesan'];
+const CN_REFINERIES = ['Ningbo', 'Tianjin', 'Huizhou'];
+const TW_REFINERIES = ['Kaohsiung', 'Taoyuan', 'Mailiao'];
+const NK_REFINERIES = ['Nampo'];
+const REFINERIES = [...JP_REFINERIES, ...SK_REFINERIES, ...CN_REFINERIES, ...TW_REFINERIES, ...NK_REFINERIES];
 
-const NODE_COMPANIES: Record<string, string> = {
-  Negishi: 'ENEOS',
-  Kawasaki: 'ENEOS',
-  Chiba: 'ENEOS',
-  Mizushima: 'Idemitsu',
-  Sakai: 'Cosmo',
-  Aichi: 'Cosmo',
-  Niigata: 'ENEOS'
+  // SOUTH KOREA
+  Ulsan: 'SK Energy',
+  Yeosu: 'GS Caltex',
+  Onsan: 'S-Oil',
+  Daesan: 'HD Hyundai',
+  Incheon: 'SK Energy',
+
+  // MAINLAND CHINA
+  Ningbo: 'Sinopec',
+  Shanghai: 'Sinopec',
+  Tianjin: 'PetroChina',
+  Huizhou: 'CNOOC',
+
+  // TAIWAN
+  Kaohsiung: 'CPC Corporation',
+  Taoyuan: 'CPC Corporation',
+  Mailiao: 'Formosa Petro',
+
+  // NORTH KOREA
+  Nampo: 'KPC State',
+  Sinuiju: 'KPC State',
+  Wonsan: 'KPC State',
 };
 
 const COMPANY_COLORS: Record<string, [number, number, number]> = {
-  ENEOS: [188, 0, 45],    // #BC002D
-  Idemitsu: [0, 201, 167], // #00C9A7
-  Cosmo: [255, 184, 0],   // #FFB800
-  User: [255, 255, 255]   // #FFFFFF
+  // JAPAN PALETTE
+  ENEOS: [188, 0, 45],     // Strategic Crimson
+  Idemitsu: [0, 201, 167],  // Operational Teal
+  Cosmo: [255, 184, 0],    // Logic Amber
+  
+  // KOREA PALETTE (NEO SEOUL)
+  'SK Energy': [157, 0, 255], // Electric Violet
+  'GS Caltex': [0, 242, 255], // Cyber Turquoise
+  'S-Oil': [0, 255, 157],     // Neon Emerald
+  'HD Hyundai': [77, 109, 255], // Neon Cobalt
+
+  // CHINA PALETTE
+  Sinopec: [255, 30, 30],      // Power Red
+  PetroChina: [255, 200, 0],   // China Gold
+  CNOOC: [0, 80, 255],         // Marine Blue
+
+  // TAIWAN PALETTE
+  'CPC Corporation': [0, 162, 232], // Sea Blue
+  'Formosa Petro': [210, 10, 10],   // Deep Red
+
+  // NORTH KOREA PALETTE
+  'KPC State': [160, 160, 160], // Industrial Gray
+  
+  User: [255, 255, 255]
 };
 
 const REFINERY_SVG = `data:image/svg+xml;base64,${btoa('<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128"><path d="M64 0 L128 64 L64 128 L0 64 Z" fill="white"/></svg>')}`;
@@ -71,42 +134,82 @@ interface Edge {
   weight: number;
 }
 
-const INITIAL_EDGES: Edge[] = [
-  { id: '1', source: 'Negishi', target: 'Hakodate', weight: 4 },
-  { id: '2', source: 'Negishi', target: 'Sendai', weight: 5 },
-  { id: '3', source: 'Negishi', target: 'Hachinohe', weight: 3 },
-  { id: '4', source: 'Kawasaki', target: 'Sendai', weight: 4 },
-  { id: '5', source: 'Kawasaki', target: 'Niigata', weight: 2 },
-  { id: '6', source: 'Chiba', target: 'Hakodate', weight: 3 },
-  { id: '7', source: 'Chiba', target: 'Niigata', weight: 4 },
-  { id: '8', source: 'Aichi', target: 'Fukuoka', weight: 5 },
-  { id: '9', source: 'Aichi', target: 'Matsuyama', weight: 3 },
-  { id: '10', source: 'Sakai', target: 'Fukuoka', weight: 4 },
-  { id: '11', source: 'Sakai', target: 'Kagoshima', weight: 3 },
-  { id: '12', source: 'Sakai', target: 'Okinawa', weight: 2 },
-  { id: '13', source: 'Mizushima', target: 'Matsuyama', weight: 5 },
-  { id: '14', source: 'Mizushima', target: 'Fukuoka', weight: 4 },
-  { id: '15', source: 'Mizushima', target: 'Kagoshima', weight: 4 },
-  { id: '16', source: 'Mizushima', target: 'Okinawa', weight: 3 },
-  { id: '17', source: 'Mizushima', target: 'Miyako', weight: 2 },
+const JP_INITIAL_EDGES: Edge[] = [
+  { id: 'jp-1', source: 'Negishi', target: 'Hakodate', weight: 4 },
+  { id: 'jp-2', source: 'Negishi', target: 'Sendai', weight: 5 },
+  { id: 'jp-3', source: 'Negishi', target: 'Hachinohe', weight: 3 },
+  { id: 'jp-4', source: 'Kawasaki', target: 'Sendai', weight: 4 },
+  { id: 'jp-5', source: 'Kawasaki', target: 'Niigata', weight: 2 },
+  { id: 'jp-6', source: 'Chiba', target: 'Hakodate', weight: 3 },
+  { id: 'jp-7', source: 'Chiba', target: 'Niigata', weight: 4 },
+  { id: 'jp-8', source: 'Aichi', target: 'Fukuoka', weight: 5 },
+  { id: 'jp-9', source: 'Aichi', target: 'Matsuyama', weight: 3 },
+  { id: 'jp-10', source: 'Sakai', target: 'Fukuoka', weight: 4 },
+  { id: 'jp-11', source: 'Sakai', target: 'Kagoshima', weight: 3 },
+  { id: 'jp-12', source: 'Sakai', target: 'Okinawa', weight: 2 },
+  { id: 'jp-13', source: 'Mizushima', target: 'Matsuyama', weight: 5 },
+  { id: 'jp-14', source: 'Mizushima', target: 'Fukuoka', weight: 4 },
+  { id: 'jp-15', source: 'Mizushima', target: 'Kagoshima', weight: 4 },
 ];
 
-const IMPORT_EDGES = [
-  { id: 'imp-1', source: 'Saudi Arabia', target: 'Chiba', weight: 5 },
-  { id: 'imp-2', source: 'UAE', target: 'Negishi', weight: 4 },
-  { id: 'imp-3', source: 'Kuwait', target: 'Kawasaki', weight: 4 },
-  { id: 'imp-4', source: 'USA Houston', target: 'Sakai', weight: 3 },
-  { id: 'imp-5', source: 'Russia Kozmino', target: 'Niigata', weight: 3 },
+const SK_INITIAL_EDGES: Edge[] = [
+  { id: 'sk-1', source: 'Yeosu', target: 'Ulsan', weight: 4 },
+  { id: 'sk-2', source: 'Yeosu', target: 'Busan', weight: 3 },
+  { id: 'sk-3', source: 'Ulsan', target: 'Incheon', weight: 5 },
+  { id: 'sk-4', source: 'Daesan', target: 'Incheon', weight: 4 },
+  { id: 'sk-5', source: 'Onsan', target: 'Busan', weight: 2 },
+];
+
+const JP_IMPORT_EDGES = [
+  { id: 'jp-i1', source: 'Saudi Arabia', target: 'Chiba', weight: 5 },
+  { id: 'jp-i2', source: 'UAE', target: 'Negishi', weight: 4 },
+  { id: 'jp-i3', source: 'Kuwait', target: 'Kawasaki', weight: 4 },
+];
+
+const SK_IMPORT_EDGES = [
+  { id: 'sk-i1', source: 'Saudi Arabia', target: 'Yeosu', weight: 5 },
+  { id: 'sk-i2', source: 'UAE', target: 'Ulsan', weight: 4 },
+  { id: 'sk-i3', source: 'Kuwait', target: 'Daesan', weight: 4 },
+];
+
+const CN_IMPORT_EDGES = [
+  { id: 'cn-i1', source: 'Saudi Arabia', target: 'Ningbo', weight: 5 },
+  { id: 'cn-i2', source: 'UAE', target: 'Huizhou', weight: 4 },
+  { id: 'cn-i3', source: 'Russia Kozmino', target: 'Tianjin', weight: 4 },
+];
+
+const TW_IMPORT_EDGES = [
+  { id: 'tw-i1', source: 'Saudi Arabia', target: 'Kaohsiung', weight: 5 },
+  { id: 'tw-i2', source: 'Kuwait', target: 'Taoyuan', weight: 4 },
+];
+
+const TW_DOMESTIC_EDGES: Edge[] = [
+  { id: 'tw-1', source: 'Kaohsiung', target: 'Taoyuan', weight: 3 },
+  { id: 'tw-2', source: 'Mailiao', target: 'Kaohsiung', weight: 4 },
+];
+
+const NK_DOMESTIC_EDGES: Edge[] = [
+  { id: 'nk-1', source: 'Nampo', target: 'Sinuiju', weight: 3 },
+  { id: 'nk-2', source: 'Nampo', target: 'Wonsan', weight: 2 },
 ];
 
 const EXPORT_EDGES = [
   { id: 'exp-1', source: 'Chiba', target: 'Hong Kong', weight: 4 },
   { id: 'exp-2', source: 'Chiba', target: 'Shanghai', weight: 3 },
-  { id: 'exp-3', source: 'Negishi', target: 'Incheon', weight: 3 },
-  { id: 'exp-4', source: 'Sakai', target: 'Port of Melbourne', weight: 2 },
+  { id: 'exp-3', source: 'Incheon', target: 'Niigata', weight: 3 }, 
+  { id: 'exp-4', source: 'Ulsan', target: 'Fukuoka', weight: 4 },   
+  { id: 'exp-5', source: 'Ningbo', target: 'Kawasaki', weight: 3 }, 
+  { id: 'exp-6', source: 'Shanghai', target: 'Sakai', weight: 2 },  
+  { id: 'exp-7', source: 'Kaohsiung', target: 'Okinawa', weight: 3 }, // Taiwan-Japan Corridor
+  { id: 'exp-8', source: 'Kaohsiung', target: 'Negishi', weight: 2 }, // Strategic Swap
+  { id: 'exp-9', source: 'Sinuiju', target: 'Tianjin', weight: 2 },   // Cross-Border
 ];
 
 const MACRO_JAPAN: [number, number] = [137.0, 36.0];
+const MACRO_KOREA: [number, number] = [128.0, 36.5];
+const MACRO_CHINA: [number, number] = [121.5, 31.0];
+const MACRO_TAIWAN: [number, number] = [121.0, 23.7];
+const MACRO_NORTH_KOREA: [number, number] = [126.5, 40.0];
 
 const VIEW_STATES = {
   global: {
@@ -116,10 +219,38 @@ const VIEW_STATES = {
     pitch: 0,
     bearing: 0,
   },
-  country: {
+  japan: {
     longitude: 137.0,
     latitude: 35.0,
     zoom: 5.8,
+    pitch: 0,
+    bearing: 0,
+  },
+  korea: {
+    longitude: 128.0,
+    latitude: 36.5,
+    zoom: 6.8,
+    pitch: 0,
+    bearing: 0,
+  },
+  china: {
+    longitude: 121.5,
+    latitude: 31.0,
+    zoom: 5.5,
+    pitch: 0,
+    bearing: 0,
+  },
+  taiwan: {
+    longitude: 121.0,
+    latitude: 23.7,
+    zoom: 7.2,
+    pitch: 0,
+    bearing: 0,
+  },
+  northkorea: {
+    longitude: 126.5,
+    latitude: 39.5,
+    zoom: 6.5,
     pitch: 0,
     bearing: 0,
   }
@@ -137,21 +268,32 @@ const CENTRALITY: Record<string, {
   eigenvector: number;
   closeness: number;
 }> = {
+  // JAPAN
   Chiba:           { degree: 5, betweenness: 4.0, eigenvector: 0.049, closeness: 1.0 },
   Negishi:         { degree: 5, betweenness: 4.0, eigenvector: 0.049, closeness: 1.0 },
   Sakai:           { degree: 5, betweenness: 4.0, eigenvector: 0.049, closeness: 1.0 },
   Mizushima:       { degree: 5, betweenness: 1.0, eigenvector: 0.0,   closeness: 1.0 },
   Kawasaki:        { degree: 3, betweenness: 2.0, eigenvector: 0.049, closeness: 1.0 },
   Niigata:         { degree: 3, betweenness: 0.0, eigenvector: 1.0,   closeness: 0.0 },
-  Aichi:           { degree: 2, betweenness: 0.0, eigenvector: 0.0,   closeness: 1.0 },
-  Hakodate:        { degree: 2, betweenness: 0.0, eigenvector: 0.951, closeness: 0.0 },
-  Sendai:          { degree: 2, betweenness: 0.0, eigenvector: 0.951, closeness: 0.0 },
-  Hachinohe:       { degree: 1, betweenness: 0.0, eigenvector: 0.475, closeness: 0.0 },
-  Matsuyama:       { degree: 2, betweenness: 0.0, eigenvector: 0.099, closeness: 0.0 },
-  Fukuoka:         { degree: 3, betweenness: 0.0, eigenvector: 0.0,   closeness: 0.0 },
-  Kagoshima:       { degree: 2, betweenness: 0.0, eigenvector: 0.475, closeness: 0.0 },
-  Okinawa:         { degree: 2, betweenness: 0.0, eigenvector: 0.525, closeness: 0.0 },
-  Miyako:          { degree: 1, betweenness: 0.0, eigenvector: 0.0,   closeness: 0.0 },
+  
+  // KOREA
+  Ulsan:           { degree: 5, betweenness: 3.5, eigenvector: 0.82,  closeness: 0.9 },
+  Yeosu:           { degree: 4, betweenness: 2.8, eigenvector: 0.75,  closeness: 0.8 },
+  Onsan:           { degree: 3, betweenness: 1.5, eigenvector: 0.40,  closeness: 0.5 },
+  Daesan:          { degree: 3, betweenness: 1.2, eigenvector: 0.35,  closeness: 0.4 },
+
+  // CHINA
+  Ningbo:          { degree: 6, betweenness: 5.0, eigenvector: 0.95,  closeness: 1.0 },
+  Shanghai:        { degree: 5, betweenness: 4.2, eigenvector: 0.88,  closeness: 0.9 },
+  Tianjin:         { degree: 4, betweenness: 3.0, eigenvector: 0.70,  closeness: 0.7 },
+  Huizhou:         { degree: 4, betweenness: 2.5, eigenvector: 0.65,  closeness: 0.7 },
+
+  // TAIWAN
+  Kaohsiung:       { degree: 5, betweenness: 3.8, eigenvector: 0.85,  closeness: 0.9 },
+  Taoyuan:         { degree: 3, betweenness: 1.5, eigenvector: 0.40,  closeness: 0.5 },
+
+  // NORTH KOREA
+  Nampo:           { degree: 4, betweenness: 2.0, eigenvector: 0.50,  closeness: 0.6 },
 };
 
 // --- UTILS ---
@@ -199,20 +341,26 @@ const CRTOverlay = () => (
 );
 
 export default function App() {
-  const [viewMode, setViewMode] = useState<'global' | 'country'>('global');
+  const [viewMode, setViewMode] = useState<'global' | 'japan' | 'korea' | 'china' | 'taiwan' | 'northkorea'>('global');
   const [viewState, setViewState] = useState<any>(VIEW_STATES.global);
-  const [edges, setEdges] = useState<Edge[]>(INITIAL_EDGES);
+  const [edges, setEdges] = useState<Edge[]>(JP_INITIAL_EDGES);
   const [transportMode, setTransportMode] = useState<'ship' | 'truck'>('ship');
   const [hoverInfo, setHoverInfo] = useState<{name: string, x: number, y: number} | null>(null);
   const hoveredNode = hoverInfo?.name || null;
   const [draggingSource, setDraggingSource] = useState<string | null>(null);
   const [mousePos, setMousePos] = useState<[number, number] | null>(null);
 
-  const goToCountryView = () => {
-    setViewMode('country');
+  const goToHub = (hub: 'japan' | 'korea' | 'china' | 'taiwan' | 'northkorea') => {
+    setViewMode(hub);
     setHoverInfo(null);
+    if (hub === 'japan') setEdges(JP_INITIAL_EDGES);
+    else if (hub === 'korea') setEdges(SK_INITIAL_EDGES);
+    else if (hub === 'taiwan') setEdges(TW_DOMESTIC_EDGES);
+    else if (hub === 'northkorea') setEdges(NK_DOMESTIC_EDGES);
+    else setEdges([]); 
+    
     setViewState({
-      ...VIEW_STATES.country,
+      ...VIEW_STATES[hub],
       transitionDuration: 1500,
       transitionInterpolator: new FlyToInterpolator(),
     });
@@ -229,16 +377,34 @@ export default function App() {
   };
 
   const nodes = useMemo(() => {
-    return Object.entries(LOCATIONS).map(([name, coordinates]) => ({
+    // Filter nodes by active hub refineries and logistics
+    let relevantNodes: string[] = [];
+    if (viewMode === 'japan') {
+        relevantNodes = Object.keys(LOCATIONS).filter(name => JP_REFINERIES.includes(name) || ['Hakodate', 'Sendai', 'Hachinohe', 'Matsuyama', 'Fukuoka', 'Kagoshima', 'Okinawa', 'Miyako'].includes(name));
+    } else if (viewMode === 'korea') {
+        relevantNodes = Object.keys(LOCATIONS).filter(name => SK_REFINERIES.includes(name) || ['Incheon', 'Busan'].includes(name));
+    } else if (viewMode === 'china') {
+        relevantNodes = Object.keys(LOCATIONS).filter(name => CN_REFINERIES.includes(name) || ['Shanghai'].includes(name));
+    } else if (viewMode === 'taiwan') {
+        relevantNodes = Object.keys(LOCATIONS).filter(name => TW_REFINERIES.includes(name));
+    } else if (viewMode === 'northkorea') {
+        relevantNodes = Object.keys(LOCATIONS).filter(name => NK_REFINERIES.includes(name) || ['Sinuiju', 'Wonsan'].includes(name));
+    }
+
+    return relevantNodes.map(name => ({
       name,
-      coordinates,
+      coordinates: LOCATIONS[name],
       isRefinery: REFINERIES.includes(name),
     }));
-  }, []);
+  }, [viewMode]);
 
   const globalNodes = useMemo(() => {
     const list: any[] = [];
     list.push({ name: 'Japan', coordinates: MACRO_JAPAN, isRefinery: false, isHub: true });
+    list.push({ name: 'South Korea', coordinates: MACRO_KOREA, isRefinery: false, isHub: true });
+    list.push({ name: 'Mainland China', coordinates: MACRO_CHINA, isRefinery: false, isHub: true });
+    list.push({ name: 'Taiwan Hub', coordinates: MACRO_TAIWAN, isRefinery: false, isHub: true });
+    list.push({ name: 'North Korea Hub', coordinates: MACRO_NORTH_KOREA, isRefinery: false, isHub: true });
     Object.entries(IMPORT_SOURCES).forEach(([name, coordinates]) => {
       list.push({ name, coordinates, isRefinery: false, isSource: true });
     });
@@ -250,11 +416,26 @@ export default function App() {
 
   const globalEdges = useMemo(() => {
     const list: any[] = [];
-    IMPORT_EDGES.forEach(e => {
+    JP_IMPORT_EDGES.forEach(e => {
         list.push({ source: e.source, target: 'Japan', weight: e.weight, id: `g-${e.id}`, type: 'import' });
     });
+    SK_IMPORT_EDGES.forEach(e => {
+        list.push({ source: e.source, target: 'South Korea', weight: e.weight, id: `g-${e.id}`, type: 'import' });
+    });
+    CN_IMPORT_EDGES.forEach(e => {
+        list.push({ source: e.source, target: 'Mainland China', weight: e.weight, id: `g-${e.id}`, type: 'import' });
+    });
+    TW_IMPORT_EDGES.forEach(e => {
+        list.push({ source: e.source, target: 'Taiwan Hub', weight: e.weight, id: `g-${e.id}`, type: 'import' });
+    });
     EXPORT_EDGES.forEach(e => {
-        list.push({ source: 'Japan', target: e.target, weight: e.weight, id: `g-${e.id}`, type: 'export' });
+        let sourceHub = 'Japan';
+        if (['Incheon', 'Ulsan'].includes(e.source)) sourceHub = 'South Korea';
+        if (['Ningbo', 'Shanghai'].includes(e.source)) sourceHub = 'Mainland China';
+        if (['Kaohsiung', 'Taoyuan'].includes(e.source)) sourceHub = 'Taiwan Hub';
+        if (['Nampo', 'Sinuiju'].includes(e.source)) sourceHub = 'North Korea Hub';
+        
+        list.push({ source: sourceHub, target: e.target, weight: e.weight, id: `g-${e.id}`, type: 'export' });
     });
     return list;
   }, []);
@@ -673,6 +854,15 @@ export default function App() {
           onDragStart={handleDragStart}
           onDrag={handleDrag}
           onDragEnd={handleDragEnd}
+          onClick={(info: any) => {
+            if (viewMode === 'global' && info.object && info.object.isHub) {
+              if (info.object.name === 'Japan') goToHub('japan');
+              if (info.object.name === 'South Korea') goToHub('korea');
+              if (info.object.name === 'Mainland China') goToHub('china');
+              if (info.object.name === 'Taiwan Hub') goToHub('taiwan');
+              if (info.object.name === 'North Korea Hub') goToHub('northkorea');
+            }
+          }}
           getCursor={({ isHovering, isDragging }) => 
             viewMode === 'global' ? (isHovering ? 'pointer' : 'grab') : (isDragging ? 'grabbing' : isHovering ? 'pointer' : 'crosshair')
           }
@@ -683,7 +873,7 @@ export default function App() {
 
       {/* SIDEBAR / MISSION CONTROL PANEL */}
       <div className="absolute top-0 left-0 h-full w-[280px] bg-black/60 border-r border-white/10 p-6 flex flex-col z-10 backdrop-blur-2xl">
-        {viewMode === 'country' && (
+        {viewMode !== 'global' && (
           <button 
             onClick={goToGlobalView}
             className="text-white/60 hover:text-white text-[9px] uppercase flex items-center gap-2 mb-8 border border-white/10 bg-white/5 px-3 py-1.5 rounded cursor-pointer transition-colors w-fit"
@@ -697,6 +887,13 @@ export default function App() {
             <Activity className="w-4 h-4 animate-pulse" />
             HINOMARU COMMAND
           </h1>
+          <div className="mt-2 text-[9px] text-white/30 uppercase tracking-[2px] border-l border-[#BC002D] pl-2">
+            HUB: {viewMode === 'global' ? 'GLOBAL_COORD' : 
+                  viewMode === 'japan' ? 'JAPAN_SECTOR' : 
+                  viewMode === 'korea' ? 'KOREA_SECTOR' : 
+                  viewMode === 'china' ? 'CHINA_SECTOR' : 
+                  viewMode === 'taiwan' ? 'TAIWAN_SECTOR' : 'DPRK_SECTOR'}
+          </div>
         </div>
 
         <div className="space-y-6 flex-1 overflow-y-auto pr-2 custom-scrollbar">
@@ -709,7 +906,10 @@ export default function App() {
                 <Globe className="w-3 h-3 text-[#BC002D]" />
               </div>
               <div className="space-y-1">
-                {IMPORT_EDGES.filter(e => !hoveredNode || e.target === hoveredNode).map((edge, idx) => (
+                {(viewMode === 'japan' ? JP_IMPORT_EDGES : 
+                  viewMode === 'korea' ? SK_IMPORT_EDGES : 
+                  viewMode === 'china' ? CN_IMPORT_EDGES : 
+                  viewMode === 'taiwan' ? TW_IMPORT_EDGES : []).filter(e => !hoveredNode || e.target === hoveredNode).map((edge, idx) => (
                   <div key={idx} className="flex items-center justify-between py-1.5 px-1 hover:bg-white/5 rounded transition-colors group">
                     <div className="flex items-center gap-2 text-[10px]">
                       <span className="text-white/50 group-hover:text-white/80 transition-colors truncate max-w-[80px]">{edge.source}</span>
@@ -749,7 +949,14 @@ export default function App() {
                 <LogOut className="w-3 h-3 text-white/40" />
               </div>
               <div className="space-y-1">
-                {EXPORT_EDGES.filter(e => !hoveredNode || e.source === hoveredNode).map((edge, idx) => (
+                {EXPORT_EDGES.filter(e => {
+                    if (viewMode === 'japan') return JP_REFINERIES.includes(e.source);
+                    if (viewMode === 'korea') return SK_REFINERIES.includes(e.source);
+                    if (viewMode === 'china') return CN_REFINERIES.includes(e.source);
+                    if (viewMode === 'taiwan') return TW_REFINERIES.includes(e.source);
+                    if (viewMode === 'northkorea') return NK_REFINERIES.includes(e.source);
+                    return false;
+                }).filter(e => !hoveredNode || e.source === hoveredNode).map((edge, idx) => (
                   <div key={idx} className="flex items-center justify-between py-1.5 px-1 hover:bg-white/5 rounded transition-colors group">
                     <div className="flex items-center gap-2 text-[10px]">
                       <span className="text-white/80 group-hover:text-white transition-colors">{edge.source}</span>
@@ -823,18 +1030,19 @@ export default function App() {
         ) : (
           <div className="flex items-center gap-8">
             <div className="flex items-center gap-6 border-r border-white/10 pr-6">
-                <div className="flex items-center gap-2">
-                    <div className="w-4 h-0.5 bg-[#BC002D]" />
-                    <span className="text-[9px] uppercase tracking-[1px] text-white/60">ENEOS</span>
-                </div>
-                <div className="flex items-center gap-2">
-                    <div className="w-4 h-0.5 bg-[#00C9A7]" />
-                    <span className="text-[9px] uppercase tracking-[1px] text-white/60">IDEMITSU</span>
-                </div>
-                <div className="flex items-center gap-2">
-                    <div className="w-4 h-0.5 bg-[#FFB800]" />
-                    <span className="text-[9px] uppercase tracking-[1px] text-white/60">COSMO</span>
-                </div>
+                {Object.entries(COMPANY_COLORS).filter(([name]) => {
+                    if (viewMode === 'japan') return ['ENEOS', 'Idemitsu', 'Cosmo'].includes(name);
+                    if (viewMode === 'korea') return ['SK Energy', 'GS Caltex', 'S-Oil', 'HD Hyundai'].includes(name);
+                    if (viewMode === 'china') return ['Sinopec', 'PetroChina', 'CNOOC'].includes(name);
+                    if (viewMode === 'taiwan') return ['CPC Corporation', 'Formosa Petro'].includes(name);
+                    if (viewMode === 'northkorea') return ['KPC State'].includes(name);
+                    return false;
+                }).map(([name, color], idx) => (
+                    <div key={idx} className="flex items-center gap-2">
+                        <div className="w-4 h-0.5" style={{ backgroundColor: `rgb(${color.join(',')})`, boxShadow: `0 0 8px rgba(${color.join(',')}, 0.5)` }} />
+                        <span className="text-[9px] uppercase tracking-[1px] text-white/60">{name}</span>
+                    </div>
+                ))}
             </div>
             <div className="flex items-center gap-6">
               <div className="flex items-center gap-2">
