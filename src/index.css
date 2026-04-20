@@ -17,4 +17,40 @@
   .custom-scrollbar::-webkit-scrollbar-thumb:hover {
     background: rgba(188, 0, 45, 0.5);
   }
+
+  .hud-glass {
+    @apply bg-black/40 backdrop-blur-md border border-white/10 shadow-[0_0_15px_rgba(0,0,0,0.5)];
+  }
+
+  .hud-border-crimson {
+    @apply border-[#BC002D]/30 border-l-2;
+  }
+}
+
+@layer utilities {
+  .animate-scanline {
+    animation: scanline 8s linear infinite;
+  }
+
+  @keyframes scanline {
+    0% { transform: translateY(-100%); }
+    100% { transform: translateY(1000%); }
+  }
+
+  .hud-bracket-tl {
+    @apply absolute top-0 left-0 w-2 h-2 border-t border-l border-white/40;
+  }
+  .hud-bracket-tr {
+    @apply absolute top-0 right-0 w-2 h-2 border-t border-r border-white/40;
+  }
+  .hud-bracket-bl {
+    @apply absolute bottom-0 left-0 w-2 h-2 border-b border-l border-white/40;
+  }
+  .hud-bracket-br {
+    @apply absolute bottom-0 right-0 w-2 h-2 border-b border-r border-white/40;
+  }
+
+  .glossy-gradient {
+    background: linear-gradient(135deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0) 100%);
+  }
 }
