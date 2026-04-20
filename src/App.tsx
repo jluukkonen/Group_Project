@@ -589,12 +589,13 @@ export default function App() {
   const exportMarkers = useMemo(() => {
     return EXPORT_EDGES.map(edge => {
       const s = LOCATIONS[edge.source];
-      const t = EXPORT_DESTINATIONS[edge.target];
+      const t = EXPORT_DESTINATIONS[edge.target] || LOCATIONS[edge.target] || [0,0];
+      if (!s) return null;
       return {
         position: [s[0] + (t[0] - s[0]) * 0.5, s[1] + (t[1] - s[1]) * 0.5],
         edge
       };
-    });
+    }).filter(Boolean);
   }, []);
 
   const layers = [
@@ -602,8 +603,8 @@ export default function App() {
     new ArcLayer({
       id: 'global-arcs',
       data: globalEdges,
-      getSourcePosition: (d: any) => d.type === 'import' ? IMPORT_SOURCES[d.source] : HUB_COORDS[d.source] || MACRO_JAPAN,
-      getTargetPosition: (d: any) => d.type === 'import' ? HUB_COORDS[d.target] || MACRO_JAPAN : EXPORT_DESTINATIONS[d.target],
+      getSourcePosition: (d: any) => d.type === 'import' ? (IMPORT_SOURCES[d.source] || [0,0]) : (HUB_COORDS[d.source] || MACRO_JAPAN),
+      getTargetPosition: (d: any) => d.type === 'import' ? (HUB_COORDS[d.target] || MACRO_JAPAN) : (EXPORT_DESTINATIONS[d.target] || LOCATIONS[d.target] || [0,0]),
       getSourceColor: (d: any) => {
          const isActive = !hoveredNode || d.source === hoveredNode || d.target === hoveredNode;
          if (!isActive) return [COLOR_CRIMSON[0], COLOR_CRIMSON[1], COLOR_CRIMSON[2], 20];
