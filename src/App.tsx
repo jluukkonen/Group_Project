@@ -72,7 +72,16 @@ const CN_REFINERIES = ['Ningbo', 'Tianjin', 'Huizhou'];
 const TW_REFINERIES = ['Kaohsiung', 'Taoyuan', 'Mailiao'];
 const NK_REFINERIES = ['Nampo'];
 const REFINERIES = [...JP_REFINERIES, ...SK_REFINERIES, ...CN_REFINERIES, ...TW_REFINERIES, ...NK_REFINERIES];
-
+const NODE_COMPANIES: Record<string, string> = {
+  // JAPAN
+  Negishi: 'ENEOS',
+  Kawasaki: 'ENEOS',
+  Chiba: 'ENEOS',
+  Mizushima: 'Idemitsu',
+  Sakai: 'Cosmo',
+  Aichi: 'Cosmo',
+  Niigata: 'ENEOS',
+  
   // SOUTH KOREA
   Ulsan: 'SK Energy',
   Yeosu: 'GS Caltex',
