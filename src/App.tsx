@@ -211,6 +211,14 @@ const MACRO_CHINA: [number, number] = [121.5, 31.0];
 const MACRO_TAIWAN: [number, number] = [121.0, 23.7];
 const MACRO_NORTH_KOREA: [number, number] = [126.5, 40.0];
 
+const HUB_COORDS: Record<string, [number, number]> = {
+  'Japan': MACRO_JAPAN,
+  'South Korea': MACRO_KOREA,
+  'Mainland China': MACRO_CHINA,
+  'Taiwan Hub': MACRO_TAIWAN,
+  'North Korea Hub': MACRO_NORTH_KOREA
+};
+
 const VIEW_STATES = {
   global: {
     longitude: 90.0,
@@ -515,6 +523,11 @@ export default function App() {
        return connected;
     }
 
+    const currentImports = viewMode === 'japan' ? JP_IMPORT_EDGES : 
+                          viewMode === 'korea' ? SK_IMPORT_EDGES : 
+                          viewMode === 'china' ? CN_IMPORT_EDGES : 
+                          viewMode === 'taiwan' ? TW_IMPORT_EDGES : [];
+
     if (!hoveredNode) return new Set(nodes.map((n) => n.name));
     const connected = new Set<string>();
     connected.add(hoveredNode);
@@ -522,7 +535,7 @@ export default function App() {
       if (e.source === hoveredNode) connected.add(e.target);
       if (e.target === hoveredNode) connected.add(e.source);
     });
-    IMPORT_EDGES.forEach((e) => {
+    currentImports.forEach((e) => {
       if (e.target === hoveredNode) connected.add(e.source);
     });
     EXPORT_EDGES.forEach((e) => {
@@ -580,8 +593,8 @@ export default function App() {
     new ArcLayer({
       id: 'global-arcs',
       data: globalEdges,
-      getSourcePosition: (d: any) => d.type === 'import' ? IMPORT_SOURCES[d.source] : MACRO_JAPAN,
-      getTargetPosition: (d: any) => d.type === 'import' ? MACRO_JAPAN : EXPORT_DESTINATIONS[d.target],
+      getSourcePosition: (d: any) => d.type === 'import' ? IMPORT_SOURCES[d.source] : HUB_COORDS[d.source] || MACRO_JAPAN,
+      getTargetPosition: (d: any) => d.type === 'import' ? HUB_COORDS[d.target] || MACRO_JAPAN : EXPORT_DESTINATIONS[d.target],
       getSourceColor: (d: any) => {
          const isActive = !hoveredNode || d.source === hoveredNode || d.target === hoveredNode;
          if (!isActive) return [COLOR_CRIMSON[0], COLOR_CRIMSON[1], COLOR_CRIMSON[2], 20];
