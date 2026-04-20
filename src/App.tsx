@@ -394,6 +394,31 @@ export default function App() {
       }
     }),
     new ScatterplotLayer({
+      id: 'team-radar-zones',
+      data: teamNodes,
+      getPosition: (d: any) => d.coordinates,
+      getFillColor: (d: any) => [...d.color, 40],
+      getLineColor: (d: any) => [...d.color, 150],
+      getLineWidth: 2,
+      lineWidthMinPixels: 2,
+      getRadius: (d: any) => d.radius,
+      stroked: true,
+      pickable: false, // Disabled to prevent blocking underlying layers
+      visible: viewMode === 'global',
+    }),
+    new TextLayer({
+      id: 'team-labels',
+      data: teamNodes,
+      getPosition: (d: any) => d.coordinates,
+      getText: (d: any) => d.assignee !== 'UNASSIGNED' ? d.assignee : '',
+      getSize: 24,
+      getColor: (d: any) => [...d.color, 255],
+      getPixelOffset: [0, 0],
+      fontWeight: 'bold',
+      fontFamily: 'JetBrains Mono, monospace',
+      visible: viewMode === 'global',
+    }),
+    new ScatterplotLayer({
       id: 'global-nodes',
       data: globalNodes,
       getPosition: (d: any) => d.coordinates,
@@ -436,32 +461,6 @@ export default function App() {
       updateTriggers: {
         getColor: [activeNodes],
       },
-    }),
-
-    new ScatterplotLayer({
-      id: 'team-radar-zones',
-      data: teamNodes,
-      getPosition: (d: any) => d.coordinates,
-      getFillColor: (d: any) => [...d.color, 40],
-      getLineColor: (d: any) => [...d.color, 150],
-      getLineWidth: 2,
-      lineWidthMinPixels: 2,
-      getRadius: (d: any) => d.radius,
-      stroked: true,
-      pickable: true,
-      visible: viewMode === 'global',
-    }),
-    new TextLayer({
-      id: 'team-labels',
-      data: teamNodes,
-      getPosition: (d: any) => d.coordinates,
-      getText: (d: any) => d.assignee !== 'UNASSIGNED' ? d.assignee : '',
-      getSize: 24,
-      getColor: (d: any) => [...d.color, 255],
-      getPixelOffset: [0, 0],
-      fontWeight: 'bold',
-      fontFamily: 'JetBrains Mono, monospace',
-      visible: viewMode === 'global',
     }),
 
     // ----- DOMESTIC LAYERS -----
