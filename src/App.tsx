@@ -228,6 +228,15 @@ const HUB_COORDS: Record<string, [number, number]> = {
   'North Korea Hub': MACRO_NORTH_KOREA
 };
 
+const HUBS = [
+  { id: 'global', name: 'Global', flag: '🌐' },
+  { id: 'japan', name: 'Japan', flag: '🇯🇵' },
+  { id: 'korea', name: 'South Korea', flag: '🇰🇷' },
+  { id: 'china', name: 'Mainland China', flag: '🇨🇳' },
+  { id: 'taiwan', name: 'Taiwan', flag: '🇹🇼' },
+  { id: 'northkorea', name: 'North Korea', flag: '🇰🇵' },
+];
+
 const VIEW_STATES = {
   global: {
     longitude: 90.0,
@@ -557,12 +566,17 @@ export default function App() {
 
   // Pre-compute geometric paths for internal routes
   const internalPaths = useMemo(() => {
-    return edges.map(edge => ({
-      ...edge,
-      path: transportMode === 'ship' 
-        ? generateArcPath(LOCATIONS[edge.source], LOCATIONS[edge.target])
-        : [LOCATIONS[edge.source], LOCATIONS[edge.target]]
-    }));
+    return edges.map(edge => {
+      const s = LOCATIONS[edge.source];
+      const t = LOCATIONS[edge.target];
+      if (!s || !t) return null;
+      return {
+        ...edge,
+        path: transportMode === 'ship' 
+          ? generateArcPath(s, t)
+          : [s, t]
+      };
+    }).filter((b): b is any => b !== null);
   }, [edges, transportMode]);
 
   // Directional markers (Chevrons) for internal routes
@@ -605,8 +619,14 @@ export default function App() {
     new ArcLayer({
       id: 'global-arcs',
       data: globalEdges,
-      getSourcePosition: (d: any) => d.type === 'import' ? (IMPORT_SOURCES[d.source] || [0,0]) : (HUB_COORDS[d.source] || MACRO_JAPAN),
-      getTargetPosition: (d: any) => d.type === 'import' ? (HUB_COORDS[d.target] || MACRO_JAPAN) : (EXPORT_DESTINATIONS[d.target] || LOCATIONS[d.target] || [0,0]),
+      getSourcePosition: (d: any) => {
+        if (d.type === 'import') return IMPORT_SOURCES[d.source] || [0, 0];
+        return HUB_COORDS[d.source] || MACRO_JAPAN;
+      },
+      getTargetPosition: (d: any) => {
+        if (d.type === 'import') return HUB_COORDS[d.target] || MACRO_JAPAN;
+        return EXPORT_DESTINATIONS[d.target] || LOCATIONS[d.target] || [0, 0];
+      },
       getSourceColor: (d: any) => {
          const isActive = !hoveredNode || d.source === hoveredNode || d.target === hoveredNode;
          if (!isActive) return [COLOR_CRIMSON[0], COLOR_CRIMSON[1], COLOR_CRIMSON[2], 20];
@@ -705,7 +725,7 @@ export default function App() {
       getTargetColor: [139, 0, 0, 50],
       getWidth: (d: any) => d.weight * 2,
       opacity: hoveredNode ? 0.1 : 0.4,
-      visible: viewMode === 'country',
+      visible: viewMode !== 'global',
       updateTriggers: {
         opacity: [hoveredNode]
       },
@@ -727,10 +747,15 @@ export default function App() {
     // LAYER 3: EXPORT ROUTES (Dashed lines)
     new PathLayer({
       id: 'export-routes',
-      data: EXPORT_EDGES.map(e => ({
-        ...e,
-        path: [LOCATIONS[e.source], EXPORT_DESTINATIONS[e.target]]
-      })),
+      data: EXPORT_EDGES.map(e => {
+        const s = LOCATIONS[e.source];
+        const t = EXPORT_DESTINATIONS[e.target] || LOCATIONS[e.target];
+        if (!s || !t) return null;
+        return {
+          ...e,
+          path: [s, t] as [number, number][]
+        };
+      }).filter((b): b is any => b !== null),
       getPath: (d: any) => d.path,
       getColor: (d: any) => [255, 255, 255, (!hoveredNode || d.source === hoveredNode) ? 80 : 20],
       getWidth: (d: any) => d.weight * 1.5,
@@ -738,7 +763,7 @@ export default function App() {
       getDashArray: [8, 4],
       dashJustified: true,
       extensions: [new PathStyleExtension({dash: true})],
-      visible: viewMode === 'country',
+      visible: viewMode !== 'global',
       updateTriggers: {
         getColor: [hoveredNode]
       }
@@ -752,7 +777,7 @@ export default function App() {
       getText: (d: any) => '⛴',
       getSize: 18,
       getColor: (d: any) => [255, 255, 255, (!hoveredNode || d.edge.source === hoveredNode) ? 255 : 50],
-      visible: viewMode === 'country',
+      visible: viewMode !== 'global',
       updateTriggers: {
         getColor: [hoveredNode]
       }
@@ -771,7 +796,7 @@ export default function App() {
       },
       getWidth: (d: any) => d.weight * 3,
       widthMinPixels: 2,
-      visible: viewMode === 'country',
+      visible: viewMode !== 'global',
       updateTriggers: {
         getColor: [hoveredNode]
       }
@@ -789,7 +814,7 @@ export default function App() {
         const isActive = !hoveredNode || d.edge.source === hoveredNode || d.edge.target === hoveredNode;
         return [...d.color, isActive ? 200 : 25] as [number, number, number, number];
       },
-      visible: viewMode === 'country',
+      visible: viewMode !== 'global',
       updateTriggers: {
         getColor: [hoveredNode]
       }
@@ -806,7 +831,7 @@ export default function App() {
       getPath: (d: any) => d.path,
       getColor: [255, 255, 255, 180],
       getWidth: 2,
-      visible: viewMode === 'country',
+      visible: viewMode !== 'global',
     }),
 
     // LAYER 8: NODE ICONS (Topmost data layer)
@@ -834,7 +859,7 @@ export default function App() {
       },
       sizeScale: 1,
       pickable: true,
-      visible: viewMode === 'country',
+      visible: viewMode !== 'global',
       onHover: (info: any) => {
         if (info.object) {
           setHoverInfo({ name: info.object.name, x: info.x, y: info.y });
@@ -1030,6 +1055,32 @@ export default function App() {
         <div className="flex items-center gap-3 hud-glass px-4 py-2 rounded-[2px] glossy-gradient text-[10px] uppercase font-bold tracking-[2.5px]">
           <div className="w-2 h-2 bg-[#BC002D] rounded-full animate-pulse shadow-[0_0_10px_#BC002D]" />
           <span>MISSION LIVE</span>
+        </div>
+      </div>
+
+      {/* HUB NAVIGATION STRIP (Bottom Center) */}
+      <div className="absolute bottom-24 left-1/2 -translate-x-1/2 z-10">
+        <div className="hud-glass px-2 py-1.5 rounded-[4px] flex items-center gap-1.5 glossy-gradient border border-white/5 shadow-2xl backdrop-blur-xl shrink-0">
+          {HUBS.map((hub) => (
+            <button
+              key={hub.id}
+              onClick={() => hub.id === 'global' ? goToGlobalView() : goToHub(hub.id as any)}
+              className={`flex items-center gap-2 px-3 py-1.5 rounded-[2px] transition-all duration-300 group ${
+                viewMode === hub.id 
+                  ? 'bg-[#BC002D] text-white shadow-[0_0_15px_rgba(188,0,45,0.3)]' 
+                  : 'hover:bg-white/5 text-white/40 hover:text-white'
+              }`}
+            >
+              <span className="text-[12px] filter grayscale group-hover:grayscale-0 transition-all">
+                {hub.flag}
+              </span>
+              <span className={`text-[9px] uppercase font-bold tracking-[2px] overflow-hidden transition-all duration-300 ${
+                viewMode === hub.id ? 'max-w-[100px] opacity-100 ml-1' : 'max-w-0 opacity-0'
+              }`}>
+                {hub.name}
+              </span>
+            </button>
+          ))}
         </div>
       </div>
 
