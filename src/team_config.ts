@@ -7,7 +7,7 @@ export const TEAM_ASSIGNMENTS = {
   },
   "North America": {
     assignee: "OLLI",
-    color: [0, 0, 255],
+    color: [255, 0, 0],
     centroid: [-100.0, 45.0],
     radius: 4500000
   },
@@ -19,7 +19,7 @@ export const TEAM_ASSIGNMENTS = {
   },
   "Europe": {
     assignee: "OLLI",
-    color: [0, 0, 255],
+    color: [255, 0, 0],
     centroid: [20.0, 52.0],
     radius: 2500000
   },
