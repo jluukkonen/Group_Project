@@ -46,17 +46,11 @@ const LOCATIONS: Record<string, [number, number]> = {
   Mailiao: [120.19, 23.79],
 
   // NORTH KOREA
-  Nampo: [125.40, 38.73],
-  Sinuiju: [124.39, 40.10],
-  Wonsan: [127.44, 39.15],
-};
+  'Nampo': [125.40, 38.73],
+  'Sinuiju': [124.39, 40.10],
+  'Wonsan': [127.44, 39.15],
 
-const IMPORT_SOURCES: Record<string, [number, number]> = {
-  'Saudi Arabia': [49.0, 26.0],
-  'UAE': [56.3, 25.3],
-  'Kuwait': [48.0, 29.4],
-  'USA Houston': [-95.0, 29.7],
-  'Russia Kozmino': [132.9, 42.7],
+  // --- GLOBAL COORDINATION REGISTRY ---
   'Spain Hub': [-3.7, 40.4],
   'Netherlands Hub': [4.9, 52.4],
   'Oman': [58.4, 23.6],
@@ -116,6 +110,15 @@ const IMPORT_SOURCES: Record<string, [number, number]> = {
   'Afghanistan': [67.7, 33.9],
   'Iraq': [43.7, 33.2],
   'Qatar': [51.2, 25.4],
+  'UAE': [53.8, 23.4],
+};
+
+const IMPORT_SOURCES: Record<string, [number, number]> = {
+  'Saudi Arabia': [49.0, 26.0], 
+  'UAE': [56.3, 25.3],
+  'Kuwait': [48.0, 29.4],
+  'USA Houston': [-95.0, 29.7],
+  'Russia Kozmino': [132.9, 42.7],
 };
 
 const EXPORT_DESTINATIONS: Record<string, [number, number]> = {
@@ -506,11 +509,25 @@ export default function App() {
     list.push({ name: 'Mainland China', coordinates: MACRO_CHINA, isRefinery: false, isHub: true });
     list.push({ name: 'Taiwan Hub', coordinates: MACRO_TAIWAN, isRefinery: false, isHub: true });
     list.push({ name: 'North Korea Hub', coordinates: MACRO_NORTH_KOREA, isRefinery: false, isHub: true });
-    Object.entries(IMPORT_SOURCES).forEach(([name, coordinates]) => {
-      list.push({ name, coordinates, isRefinery: false, isSource: true });
-    });
-    Object.entries(EXPORT_DESTINATIONS).forEach(([name, coordinates]) => {
-      list.push({ name, coordinates, isRefinery: false, isDest: true });
+    
+    // Add all export destinations and import sources as nodes for visibility
+    const allRefs = { ...HUB_COORDS, ...IMPORT_SOURCES, ...EXPORT_DESTINATIONS, ...LOCATIONS };
+    
+    Object.entries(allRefs).forEach(([name, coordinates]) => {
+      // Avoid duplicate names
+      if (list.some(n => n.name === name)) return;
+      
+      const isHub = !!HUB_COORDS[name as keyof typeof HUB_COORDS];
+      const isRefinery = REFINERIES.includes(name);
+      
+      list.push({ 
+        name, 
+        coordinates, 
+        isRefinery, 
+        isHub,
+        isSource: !!IMPORT_SOURCES[name as keyof typeof IMPORT_SOURCES],
+        isDest: !!EXPORT_DESTINATIONS[name as keyof typeof EXPORT_DESTINATIONS] || (!isHub && !REFINERIES.includes(name))
+      });
     });
     return list;
   }, []);
@@ -755,24 +772,24 @@ export default function App() {
       id: 'global-arcs',
       data: globalEdges,
       getSourcePosition: (d: any) => {
-        if (d.type === 'import') return IMPORT_SOURCES[d.source] || [0, 0];
-        return HUB_COORDS[d.source] || MACRO_JAPAN;
+        return IMPORT_SOURCES[d.source] || HUB_COORDS[d.source] || LOCATIONS[d.source] || MACRO_JAPAN;
       },
       getTargetPosition: (d: any) => {
-        if (d.type === 'import') return HUB_COORDS[d.target] || MACRO_JAPAN;
-        return EXPORT_DESTINATIONS[d.target] || LOCATIONS[d.target] || HUB_COORDS[d.target] || [0, 0];
+        return EXPORT_DESTINATIONS[d.target] || HUB_COORDS[d.target] || LOCATIONS[d.target] || IMPORT_SOURCES[d.target] || [0, 0];
       },
       getSourceColor: (d: any) => {
         const isActive = !hoveredNode || d.source === hoveredNode || d.target === hoveredNode;
         const baseColor = d.source === 'Brazil Hub' ? [0, 155, 72] :
-          d.source === 'Iran Hub' ? [0, 100, 255] : COLOR_CRIMSON;
+          d.source === 'Iran Hub' ? [0, 100, 255] : 
+          d.source === 'USA Hub' ? [0, 82, 155] : COLOR_CRIMSON;
         if (!isActive) return [baseColor[0], baseColor[1], baseColor[2], 20];
         return [baseColor[0], baseColor[1], baseColor[2], d.type === 'import' ? 180 : 80];
       },
       getTargetColor: (d: any) => {
         const isActive = !hoveredNode || d.source === hoveredNode || d.target === hoveredNode;
         const baseColor = d.source === 'Brazil Hub' ? [0, 155, 72] :
-          d.source === 'Iran Hub' ? [0, 100, 255] : COLOR_CRIMSON;
+          d.source === 'Iran Hub' ? [0, 100, 255] : 
+          d.source === 'USA Hub' ? [0, 82, 155] : COLOR_CRIMSON;
         if (!isActive) return [baseColor[0], baseColor[1], baseColor[2], 20];
         return [baseColor[0], baseColor[1], baseColor[2], d.type === 'import' ? 80 : 180];
       },
