@@ -6,8 +6,8 @@ export const TEAM_ASSIGNMENTS = {
     radius: 5000000 // Radar radius in meters
   },
   "North America": {
-    assignee: "UNASSIGNED",
-    color: [80, 80, 80],
+    assignee: "OLLI",
+    color: [0, 0, 255],
     centroid: [-100.0, 45.0],
     radius: 4500000
   },
@@ -18,8 +18,8 @@ export const TEAM_ASSIGNMENTS = {
     radius: 4000000
   },
   "Europe": {
-    assignee: "UNASSIGNED",
-    color: [80, 80, 80],
+    assignee: "OLLI",
+    color: [0, 0, 255],
     centroid: [20.0, 52.0],
     radius: 2500000
   },
