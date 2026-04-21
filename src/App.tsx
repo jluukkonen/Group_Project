@@ -62,42 +62,70 @@ const MAP_STYLE = 'https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.j
 const COLOR_CRIMSON: [number, number, number] = [188, 0, 45];
 
 const App: React.FC = () => {
-  const [viewState] = useState<any>(VIEW_STATES.global);
+  const [viewState, setViewState] = useState<any>(VIEW_STATES.global);
   const [hoveredNode, setHoveredNode] = useState<string | null>(null);
+  const [selectedTheater, setSelectedTheater] = useState<string | null>(null);
+
+  const focusTheater = (theaterName: string) => {
+    if (selectedTheater === theaterName) {
+      setSelectedTheater(null);
+      setViewState({ ...VIEW_STATES.global, transitionDuration: 1500 });
+      return;
+    }
+
+    setSelectedTheater(theaterName);
+    
+    // Strategic Navigation Mapping
+    const targets: Record<string, any> = {
+      "Asia": { longitude: 135.0, latitude: 35.0, zoom: 3.5 },
+      "North America": { longitude: -100.0, latitude: 38.0, zoom: 3.2 },
+      "South America": { longitude: -60.0, latitude: -20.0, zoom: 3.0 },
+      "Europe": { longitude: 15.0, latitude: 50.0, zoom: 3.5 },
+      "Australia": { longitude: 135.0, latitude: -25.0, zoom: 3.2 }
+    };
+
+    if (targets[theaterName]) {
+      setViewState({
+        ...viewState,
+        ...targets[theaterName],
+        transitionDuration: 1500,
+      });
+    }
+  };
 
   const globalEdges = useMemo(() => {
     const list: any[] = [];
     const BBL_CONV = 6.2898;
     
-    // BRAZIL EXPORTS (Converted KL to BBL)
-    list.push({ source: 'Brazil Hub', target: 'Mainland China', id: 'g-br-cn', volume: 49376633 * BBL_CONV });
-    list.push({ source: 'Brazil Hub', target: 'Spain Hub', id: 'g-br-es', volume: 11628197 * BBL_CONV });
-    list.push({ source: 'Brazil Hub', target: 'Netherlands Hub', id: 'g-br-nl', volume: 8023702 * BBL_CONV });
-    list.push({ source: 'Brazil Hub', target: 'USA Hub', id: 'g-br-us', volume: 14442665 * BBL_CONV });
-    list.push({ source: 'Brazil Hub', target: 'South Korea', id: 'g-br-sk', volume: 3160104 * BBL_CONV });
+    // BRAZIL EXPORTS (South America)
+    list.push({ source: 'Brazil Hub', target: 'Mainland China', id: 'g-br-cn', volume: 49376633 * BBL_CONV, theater: 'South America' });
+    list.push({ source: 'Brazil Hub', target: 'Spain Hub', id: 'g-br-es', volume: 11628197 * BBL_CONV, theater: 'South America' });
+    list.push({ source: 'Brazil Hub', target: 'Netherlands Hub', id: 'g-br-nl', volume: 8023702 * BBL_CONV, theater: 'South America' });
+    list.push({ source: 'Brazil Hub', target: 'USA Hub', id: 'g-br-us', volume: 14442665 * BBL_CONV, theater: 'South America' });
+    list.push({ source: 'Brazil Hub', target: 'South Korea', id: 'g-br-sk', volume: 3160104 * BBL_CONV, theater: 'South America' });
 
-    // IRAN EXPORTS (Already in BBL)
-    list.push({ source: 'Iran Hub', target: 'Mainland China', id: 'g-ir-cn', volume: 4530000 });
-    list.push({ source: 'Iran Hub', target: 'UAE', id: 'g-ir-ae', volume: 27670000 });
-    list.push({ source: 'Iran Hub', target: 'Oman', id: 'g-ir-om', volume: 2900000 });
-    list.push({ source: 'Iran Hub', target: 'Pakistan', id: 'g-ir-pk', volume: 1240000 });
+    // IRAN EXPORTS (Already in BBL - Asia/ME)
+    list.push({ source: 'Iran Hub', target: 'Mainland China', id: 'g-ir-cn', volume: 4530000, theater: 'Asia' });
+    list.push({ source: 'Iran Hub', target: 'UAE', id: 'g-ir-ae', volume: 27670000, theater: 'Asia' });
+    list.push({ source: 'Iran Hub', target: 'Oman', id: 'g-ir-om', volume: 2900000, theater: 'Asia' });
+    list.push({ source: 'Iran Hub', target: 'Pakistan', id: 'g-ir-pk', volume: 1240000, theater: 'Asia' });
 
     // USA EXPORTS (The Truth - Converted KL to BBL)
-    list.push({ source: 'USA Hub', target: 'South Korea', id: 'g-us-sk', volume: 176208062 * BBL_CONV });
-    list.push({ source: 'USA Hub', target: 'Mainland China', id: 'g-us-cn', volume: 8148860 * BBL_CONV });
-    list.push({ source: 'USA Hub', target: 'Canada', id: 'g-us-ca', volume: 92472582 * BBL_CONV });
-    list.push({ source: 'USA Hub', target: 'Netherlands Hub', id: 'g-us-nl', volume: 306952849 * BBL_CONV });
-    list.push({ source: 'USA Hub', target: 'Taiwan Hub', id: 'g-us-tw', volume: 76045198 * BBL_CONV });
-    list.push({ source: 'USA Hub', target: 'United Kingdom', id: 'g-us-uk', volume: 63507363 * BBL_CONV });
-    list.push({ source: 'USA Hub', target: 'Japan', id: 'g-us-jp', volume: 36954828 * BBL_CONV });
-    list.push({ source: 'USA Hub', target: 'India', id: 'g-us-in', volume: 112546350 * BBL_CONV });
-    list.push({ source: 'USA Hub', target: 'Germany', id: 'g-us-de', volume: 38322400 * BBL_CONV });
+    list.push({ source: 'USA Hub', target: 'South Korea', id: 'g-us-sk', volume: 176208062 * BBL_CONV, theater: 'North America' });
+    list.push({ source: 'USA Hub', target: 'Mainland China', id: 'g-us-cn', volume: 8148860 * BBL_CONV, theater: 'North America' });
+    list.push({ source: 'USA Hub', target: 'Canada', id: 'g-us-ca', volume: 92472582 * BBL_CONV, theater: 'North America' });
+    list.push({ source: 'USA Hub', target: 'Netherlands Hub', id: 'g-us-nl', volume: 306952849 * BBL_CONV, theater: 'North America' });
+    list.push({ source: 'USA Hub', target: 'Taiwan Hub', id: 'g-us-tw', volume: 76045198 * BBL_CONV, theater: 'North America' });
+    list.push({ source: 'USA Hub', target: 'United Kingdom', id: 'g-us-uk', volume: 63507363 * BBL_CONV, theater: 'North America' });
+    list.push({ source: 'USA Hub', target: 'Japan', id: 'g-us-jp', volume: 36954828 * BBL_CONV, theater: 'North America' });
+    list.push({ source: 'USA Hub', target: 'India', id: 'g-us-in', volume: 112546350 * BBL_CONV, theater: 'North America' });
+    list.push({ source: 'USA Hub', target: 'Germany', id: 'g-us-de', volume: 38322400 * BBL_CONV, theater: 'North America' });
 
     // STRATEGIC ARTERIES (Converted KL to BBL)
-    list.push({ source: 'Saudi Arabia', target: 'Japan', id: 'g-sa-jp', volume: 6000375 * BBL_CONV });
-    list.push({ source: 'UAE', target: 'Japan', id: 'g-uae-jp', volume: 1415982 * BBL_CONV });
-    list.push({ source: 'Kuwait', target: 'South Korea', id: 'g-ku-sk', volume: 1200000 * BBL_CONV });
-    list.push({ source: 'Russia Kozmino', target: 'Mainland China', id: 'g-ru-cn', volume: 1200800 * BBL_CONV });
+    list.push({ source: 'Saudi Arabia', target: 'Japan', id: 'g-sa-jp', volume: 6000375 * BBL_CONV, theater: 'Asia' });
+    list.push({ source: 'UAE', target: 'Japan', id: 'g-uae-jp', volume: 1415982 * BBL_CONV, theater: 'Asia' });
+    list.push({ source: 'Kuwait', target: 'South Korea', id: 'g-ku-sk', volume: 1200000 * BBL_CONV, theater: 'Asia' });
+    list.push({ source: 'Russia Kozmino', target: 'Mainland China', id: 'g-ru-cn', volume: 1200800 * BBL_CONV, theater: 'Asia' });
 
     return list;
   }, []);
@@ -117,17 +145,31 @@ const App: React.FC = () => {
       data: globalEdges,
       getSourcePosition: (d: any) => HUB_COORDS[d.source] || LOCATIONS[d.source] || [0,0],
       getTargetPosition: (d: any) => HUB_COORDS[d.target] || LOCATIONS[d.target] || [0,0],
+      greatCircle: true,
+      getHeight: (d: any) => {
+        // Z-Layering: Calculate distance to scale height
+        const s = HUB_COORDS[d.source] || LOCATIONS[d.source] || [0,0];
+        const t = HUB_COORDS[d.target] || LOCATIONS[d.target] || [0,0];
+        const dist = Math.sqrt(Math.pow(t[0]-s[0], 2) + Math.pow(t[1]-s[1], 2));
+        return Math.max(0.1, dist / 200); // Taller arcs for longer spans
+      },
       getSourceColor: (d: any) => {
-        const active = !hoveredNode || d.source === hoveredNode || d.target === hoveredNode;
+        const activeNode = !hoveredNode || d.source === hoveredNode || d.target === hoveredNode;
+        const activeTheater = !selectedTheater || d.theater === selectedTheater;
+        const active = activeNode && activeTheater;
+        
         const base = d.source === 'Brazil Hub' ? [0, 155, 72] : d.source === 'Iran Hub' ? [0, 100, 255] : d.source === 'USA Hub' ? [0, 82, 155] : COLOR_CRIMSON;
-        return [...base, active ? 180 : 20];
+        return [...base, active ? 180 : 5];
       },
       getTargetColor: (d: any) => {
-        const active = !hoveredNode || d.source === hoveredNode || d.target === hoveredNode;
+        const activeNode = !hoveredNode || d.source === hoveredNode || d.target === hoveredNode;
+        const activeTheater = !selectedTheater || d.theater === selectedTheater;
+        const active = activeNode && activeTheater;
+
         const base = d.source === 'Brazil Hub' ? [0, 155, 72] : d.source === 'Iran Hub' ? [0, 100, 255] : d.source === 'USA Hub' ? [0, 82, 155] : COLOR_CRIMSON;
-        return [...base, active ? 80 : 10];
+        return [...base, active ? 80 : 2];
       },
-      getWidth: (d: any) => Math.max(1, Math.log10(d.volume) - 5) * 3,
+      getWidth: (d: any) => Math.max(1, Math.log10(d.volume) - 5) * 4.5,
     }),
     new TextLayer({
       id: 'global-labels',
@@ -148,7 +190,7 @@ const App: React.FC = () => {
 
   return (
     <div className="h-screen w-full bg-[#050505] text-white font-sans selection:bg-[#BC002D]/30 overflow-hidden relative">
-      <DeckGL initialViewState={viewState} controller={true} layers={layers}>
+      <DeckGL viewState={viewState} onViewStateChange={(e: any) => setViewState(e.viewState)} controller={true} layers={layers}>
         <Map mapStyle={MAP_STYLE} />
       </DeckGL>
 
@@ -173,15 +215,24 @@ const App: React.FC = () => {
           </section>
 
           <section className="space-y-4">
-             <div className="text-[10px] uppercase tracking-[3px] text-white/20 font-black">Active Theaters</div>
+             <div className="text-[10px] uppercase tracking-[3px] text-white/20 font-black flex justify-between items-center">
+               <span>Active Theaters</span>
+               {selectedTheater && (
+                 <button onClick={() => setSelectedTheater(null)} className="text-[8px] bg-white/10 px-2 py-0.5 rounded-full hover:bg-white/20 transition-colors">RESET</button>
+               )}
+             </div>
              {Object.entries(TEAM_ASSIGNMENTS).map(([continent, data], idx) => (
-               <div key={idx} className="flex items-center justify-between group cursor-help">
+               <button 
+                 key={idx} 
+                 onClick={() => focusTheater(continent)}
+                 className={`w-full flex items-center justify-between group p-2 rounded-sm transition-all ${selectedTheater === continent ? 'bg-white/5 border-l-2 border-white' : 'hover:bg-white/5 border-l-2 border-transparent'}`}
+               >
                  <div className="flex items-center gap-3">
-                   <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: `rgb(${data.color.join(',')})` }} />
-                   <span className="text-[11px] uppercase tracking-wider text-white/50 group-hover:text-white transition-colors">{continent}</span>
+                   <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: selectedTheater === continent ? 'white' : `rgb(${data.color.join(',')})` }} />
+                   <span className={`text-[11px] uppercase tracking-wider transition-colors ${selectedTheater === continent ? 'text-white' : 'text-white/50 group-hover:text-white'}`}>{continent}</span>
                  </div>
                  <span className="text-[9px] font-mono text-white/20 uppercase">{data.assignee}</span>
-               </div>
+               </button>
              ))}
           </section>
         </div>
@@ -205,19 +256,18 @@ const App: React.FC = () => {
         </div>
       </div>
 
-      {/* LEGEND overlay */}
-      <div className="absolute bottom-8 right-8 z-10 flex gap-8 bg-black/20 backdrop-blur-md p-6 border border-white/5 rounded-sm">
+      <div className="absolute bottom-8 right-8 z-10 flex gap-8 bg-black/20 backdrop-blur-md p-6 border border-white/5 rounded-sm shadow-[0_0_20px_rgba(0,0,0,0.5)]">
          <div className="flex items-center gap-2">
-           <div className="w-4 h-0.5 bg-[#00529B] shadow-[0_0_8px_#00529B]" />
-           <span className="text-[9px] uppercase tracking-widest text-white/40 font-bold">USA Channels</span>
+           <div className="w-4 h-0.5 bg-[#00529B] shadow-[0_0_8px_#106be0]" />
+           <span className="text-[9px] uppercase tracking-widest text-white/50 font-bold">USA Channels</span>
          </div>
          <div className="flex items-center gap-2">
-           <div className="w-4 h-0.5 bg-[#009B48] shadow-[0_0_8px_#009B48]" />
-           <span className="text-[9px] uppercase tracking-widest text-white/40 font-bold">Brazil Channels</span>
+           <div className="w-4 h-0.5 bg-[#009B48] shadow-[0_0_8px_#15bd5d]" />
+           <span className="text-[9px] uppercase tracking-widest text-white/50 font-bold">Brazil Channels</span>
          </div>
          <div className="flex items-center gap-2">
-           <div className="w-4 h-0.5 bg-[#BC002D] shadow-[0_0_8px_#BC002D]" />
-           <span className="text-[9px] uppercase tracking-widest text-white/40 font-bold">Pacific Strategic Flux</span>
+           <div className="w-4 h-0.5 bg-[#BC002D] shadow-[0_0_8px_#ff1a55]" />
+           <span className="text-[9px] uppercase tracking-widest text-white/50 font-bold">Pacific Strategic Flux</span>
          </div>
       </div>
     </div>
