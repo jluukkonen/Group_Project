@@ -26,7 +26,7 @@ const LOCATIONS: Record<string, [number, number]> = {
   Kagoshima: [130.56, 31.57],
   Okinawa: [127.75, 26.23],
   Miyako: [125.28, 24.80],
-  
+
   // SOUTH KOREA
   Ulsan: [129.35, 35.54],
   Yeosu: [127.73, 34.75],
@@ -52,7 +52,7 @@ const LOCATIONS: Record<string, [number, number]> = {
 };
 
 const IMPORT_SOURCES: Record<string, [number, number]> = {
-  'Saudi Arabia': [49.0, 26.0], 
+  'Saudi Arabia': [49.0, 26.0],
   'UAE': [56.3, 25.3],
   'Kuwait': [48.0, 29.4],
   'USA Houston': [-95.0, 29.7],
@@ -90,7 +90,7 @@ const NODE_COMPANIES: Record<string, string> = {
   Sakai: 'Cosmo',
   Aichi: 'Cosmo',
   Niigata: 'ENEOS',
-  
+
   // SOUTH KOREA
   Ulsan: 'SK Energy',
   Yeosu: 'GS Caltex',
@@ -120,7 +120,7 @@ const COMPANY_COLORS: Record<string, [number, number, number]> = {
   ENEOS: [188, 0, 45],     // Strategic Crimson
   Idemitsu: [0, 201, 167],  // Operational Teal
   Cosmo: [255, 184, 0],    // Logic Amber
-  
+
   // KOREA PALETTE (NEO SEOUL)
   'SK Energy': [157, 0, 255], // Electric Violet
   'GS Caltex': [0, 242, 255], // Cyber Turquoise
@@ -138,7 +138,7 @@ const COMPANY_COLORS: Record<string, [number, number, number]> = {
 
   // NORTH KOREA PALETTE
   'KPC State': [160, 160, 160], // Industrial Gray
-  
+
   User: [255, 255, 255]
 };
 
@@ -214,10 +214,10 @@ const NK_DOMESTIC_EDGES: Edge[] = [
 const EXPORT_EDGES = [
   { id: 'exp-1', source: 'Chiba', target: 'Hong Kong', weight: 4 },
   { id: 'exp-2', source: 'Chiba', target: 'Shanghai', weight: 3 },
-  { id: 'exp-3', source: 'Incheon', target: 'Niigata', weight: 3 }, 
-  { id: 'exp-4', source: 'Ulsan', target: 'Fukuoka', weight: 4 },   
-  { id: 'exp-5', source: 'Ningbo', target: 'Kawasaki', weight: 3 }, 
-  { id: 'exp-6', source: 'Shanghai', target: 'Sakai', weight: 2 },  
+  { id: 'exp-3', source: 'Incheon', target: 'Niigata', weight: 3 },
+  { id: 'exp-4', source: 'Ulsan', target: 'Fukuoka', weight: 4 },
+  { id: 'exp-5', source: 'Ningbo', target: 'Kawasaki', weight: 3 },
+  { id: 'exp-6', source: 'Shanghai', target: 'Sakai', weight: 2 },
   { id: 'exp-7', source: 'Kaohsiung', target: 'Okinawa', weight: 3 }, // Taiwan-Japan Corridor
   { id: 'exp-8', source: 'Kaohsiung', target: 'Negishi', weight: 2 }, // Strategic Swap
   { id: 'exp-9', source: 'Sinuiju', target: 'Tianjin', weight: 2 },   // Cross-Border
@@ -306,38 +306,38 @@ const COLOR_CRIMSON: [number, number, number] = [188, 0, 45];
 const COLOR_WHITE: [number, number, number] = [255, 255, 255];
 const COLOR_MUTED: [number, number, number] = [80, 80, 80];
 
-const CENTRALITY: Record<string, { 
-  degree: number; 
-  betweenness: number; 
+const CENTRALITY: Record<string, {
+  degree: number;
+  betweenness: number;
   eigenvector: number;
   closeness: number;
 }> = {
   // JAPAN
-  Chiba:           { degree: 5, betweenness: 4.0, eigenvector: 0.049, closeness: 1.0 },
-  Negishi:         { degree: 5, betweenness: 4.0, eigenvector: 0.049, closeness: 1.0 },
-  Sakai:           { degree: 5, betweenness: 4.0, eigenvector: 0.049, closeness: 1.0 },
-  Mizushima:       { degree: 5, betweenness: 1.0, eigenvector: 0.0,   closeness: 1.0 },
-  Kawasaki:        { degree: 3, betweenness: 2.0, eigenvector: 0.049, closeness: 1.0 },
-  Niigata:         { degree: 3, betweenness: 0.0, eigenvector: 1.0,   closeness: 0.0 },
-  
+  Chiba: { degree: 5, betweenness: 4.0, eigenvector: 0.049, closeness: 1.0 },
+  Negishi: { degree: 5, betweenness: 4.0, eigenvector: 0.049, closeness: 1.0 },
+  Sakai: { degree: 5, betweenness: 4.0, eigenvector: 0.049, closeness: 1.0 },
+  Mizushima: { degree: 5, betweenness: 1.0, eigenvector: 0.0, closeness: 1.0 },
+  Kawasaki: { degree: 3, betweenness: 2.0, eigenvector: 0.049, closeness: 1.0 },
+  Niigata: { degree: 3, betweenness: 0.0, eigenvector: 1.0, closeness: 0.0 },
+
   // KOREA
-  Ulsan:           { degree: 5, betweenness: 3.5, eigenvector: 0.82,  closeness: 0.9 },
-  Yeosu:           { degree: 4, betweenness: 2.8, eigenvector: 0.75,  closeness: 0.8 },
-  Onsan:           { degree: 3, betweenness: 1.5, eigenvector: 0.40,  closeness: 0.5 },
-  Daesan:          { degree: 3, betweenness: 1.2, eigenvector: 0.35,  closeness: 0.4 },
+  Ulsan: { degree: 5, betweenness: 3.5, eigenvector: 0.82, closeness: 0.9 },
+  Yeosu: { degree: 4, betweenness: 2.8, eigenvector: 0.75, closeness: 0.8 },
+  Onsan: { degree: 3, betweenness: 1.5, eigenvector: 0.40, closeness: 0.5 },
+  Daesan: { degree: 3, betweenness: 1.2, eigenvector: 0.35, closeness: 0.4 },
 
   // CHINA
-  Ningbo:          { degree: 6, betweenness: 5.0, eigenvector: 0.95,  closeness: 1.0 },
-  Shanghai:        { degree: 5, betweenness: 4.2, eigenvector: 0.88,  closeness: 0.9 },
-  Tianjin:         { degree: 4, betweenness: 3.0, eigenvector: 0.70,  closeness: 0.7 },
-  Huizhou:         { degree: 4, betweenness: 2.5, eigenvector: 0.65,  closeness: 0.7 },
+  Ningbo: { degree: 6, betweenness: 5.0, eigenvector: 0.95, closeness: 1.0 },
+  Shanghai: { degree: 5, betweenness: 4.2, eigenvector: 0.88, closeness: 0.9 },
+  Tianjin: { degree: 4, betweenness: 3.0, eigenvector: 0.70, closeness: 0.7 },
+  Huizhou: { degree: 4, betweenness: 2.5, eigenvector: 0.65, closeness: 0.7 },
 
   // TAIWAN
-  Kaohsiung:       { degree: 5, betweenness: 3.8, eigenvector: 0.85,  closeness: 0.9 },
-  Taoyuan:         { degree: 3, betweenness: 1.5, eigenvector: 0.40,  closeness: 0.5 },
+  Kaohsiung: { degree: 5, betweenness: 3.8, eigenvector: 0.85, closeness: 0.9 },
+  Taoyuan: { degree: 3, betweenness: 1.5, eigenvector: 0.40, closeness: 0.5 },
 
   // NORTH KOREA
-  Nampo:           { degree: 4, betweenness: 2.0, eigenvector: 0.50,  closeness: 0.6 },
+  Nampo: { degree: 4, betweenness: 2.0, eigenvector: 0.50, closeness: 0.6 },
 };
 
 // --- UTILS ---
@@ -349,7 +349,7 @@ function generateArcPath(source: [number, number], target: [number, number], seg
   const ny = -dx * 0.2;
   const cx = source[0] + dx / 2 + nx;
   const cy = source[1] + dy / 2 + ny;
-  
+
   for (let i = 0; i <= segments; i++) {
     const t = i / segments;
     const x = Math.pow(1 - t, 2) * source[0] + 2 * (1 - t) * t * cx + Math.pow(t, 2) * target[0];
@@ -389,16 +389,16 @@ export default function App() {
   const [viewState, setViewState] = useState<any>(VIEW_STATES.global);
   const [edges, setEdges] = useState<Edge[]>(JP_INITIAL_EDGES);
   const [transportMode, setTransportMode] = useState<'ship' | 'truck'>('ship');
-  const [hoverInfo, setHoverInfo] = useState<{name: string, x: number, y: number} | null>(null);
+  const [hoverInfo, setHoverInfo] = useState<{ name: string, x: number, y: number } | null>(null);
   const hoveredNode = hoverInfo?.name || null;
   const [draggingSource, setDraggingSource] = useState<string | null>(null);
   const [mousePos, setMousePos] = useState<[number, number] | null>(null);
 
   const currentImports = useMemo(() => {
-      return viewMode === 'japan' ? JP_IMPORT_EDGES : 
-             viewMode === 'korea' ? SK_IMPORT_EDGES : 
-             viewMode === 'china' ? CN_IMPORT_EDGES : 
-             viewMode === 'taiwan' ? TW_IMPORT_EDGES : [];
+    return viewMode === 'japan' ? JP_IMPORT_EDGES :
+      viewMode === 'korea' ? SK_IMPORT_EDGES :
+        viewMode === 'china' ? CN_IMPORT_EDGES :
+          viewMode === 'taiwan' ? TW_IMPORT_EDGES : [];
   }, [viewMode]);
 
   const goToHub = (hub: 'japan' | 'korea' | 'china' | 'taiwan' | 'northkorea') => {
@@ -408,8 +408,8 @@ export default function App() {
     else if (hub === 'korea') setEdges(SK_INITIAL_EDGES);
     else if (hub === 'taiwan') setEdges(TW_DOMESTIC_EDGES);
     else if (hub === 'northkorea') setEdges(NK_DOMESTIC_EDGES);
-    else setEdges([]); 
-    
+    else setEdges([]);
+
     setViewState({
       ...VIEW_STATES[hub],
       transitionDuration: 1500,
@@ -431,15 +431,15 @@ export default function App() {
     // Filter nodes by active hub refineries and logistics
     let relevantNodes: string[] = [];
     if (viewMode === 'japan') {
-        relevantNodes = Object.keys(LOCATIONS).filter(name => JP_REFINERIES.includes(name) || ['Hakodate', 'Sendai', 'Hachinohe', 'Matsuyama', 'Fukuoka', 'Kagoshima', 'Okinawa', 'Miyako'].includes(name));
+      relevantNodes = Object.keys(LOCATIONS).filter(name => JP_REFINERIES.includes(name) || ['Hakodate', 'Sendai', 'Hachinohe', 'Matsuyama', 'Fukuoka', 'Kagoshima', 'Okinawa', 'Miyako'].includes(name));
     } else if (viewMode === 'korea') {
-        relevantNodes = Object.keys(LOCATIONS).filter(name => SK_REFINERIES.includes(name) || ['Incheon', 'Busan'].includes(name));
+      relevantNodes = Object.keys(LOCATIONS).filter(name => SK_REFINERIES.includes(name) || ['Incheon', 'Busan'].includes(name));
     } else if (viewMode === 'china') {
-        relevantNodes = Object.keys(LOCATIONS).filter(name => CN_REFINERIES.includes(name) || ['Shanghai'].includes(name));
+      relevantNodes = Object.keys(LOCATIONS).filter(name => CN_REFINERIES.includes(name) || ['Shanghai'].includes(name));
     } else if (viewMode === 'taiwan') {
-        relevantNodes = Object.keys(LOCATIONS).filter(name => TW_REFINERIES.includes(name));
+      relevantNodes = Object.keys(LOCATIONS).filter(name => TW_REFINERIES.includes(name));
     } else if (viewMode === 'northkorea') {
-        relevantNodes = Object.keys(LOCATIONS).filter(name => NK_REFINERIES.includes(name) || ['Sinuiju', 'Wonsan'].includes(name));
+      relevantNodes = Object.keys(LOCATIONS).filter(name => NK_REFINERIES.includes(name) || ['Sinuiju', 'Wonsan'].includes(name));
     }
 
     return relevantNodes.map(name => ({
@@ -468,18 +468,18 @@ export default function App() {
   const globalEdges = useMemo(() => {
     const list: any[] = [];
     JP_IMPORT_EDGES.forEach(e => {
-        list.push({ source: e.source, target: 'Japan', weight: e.weight, id: `g-${e.id}`, type: 'import' });
+      list.push({ source: e.source, target: 'Japan', weight: e.weight, id: `g-${e.id}`, type: 'import' });
     });
     SK_IMPORT_EDGES.forEach(e => {
-        list.push({ source: e.source, target: 'South Korea', weight: e.weight, id: `g-${e.id}`, type: 'import' });
+      list.push({ source: e.source, target: 'South Korea', weight: e.weight, id: `g-${e.id}`, type: 'import' });
     });
     CN_IMPORT_EDGES.forEach(e => {
-        list.push({ source: e.source, target: 'Mainland China', weight: e.weight, id: `g-${e.id}`, type: 'import' });
+      list.push({ source: e.source, target: 'Mainland China', weight: e.weight, id: `g-${e.id}`, type: 'import' });
     });
     TW_IMPORT_EDGES.forEach(e => {
-        list.push({ source: e.source, target: 'Taiwan Hub', weight: e.weight, id: `g-${e.id}`, type: 'import', volume: e.weight * 500000 });
+      list.push({ source: e.source, target: 'Taiwan Hub', weight: e.weight, id: `g-${e.id}`, type: 'import', volume: e.weight * 500000 });
     });
-    
+
     // --- NEW GLOBAL SILK ROAD ---
     // BRAZIL EXPORTS
     list.push({ source: 'Brazil Hub', target: 'Mainland China', weight: 5, id: 'g-br-cn', type: 'export', volume: 49376633 });
@@ -504,13 +504,13 @@ export default function App() {
     list.push({ source: 'USA Hub', target: 'Canada', weight: 4, id: 'g-us-ca', type: 'export', volume: 92472582 });
 
     EXPORT_EDGES.forEach(e => {
-        let sourceHub = 'Japan';
-        if (['Incheon', 'Ulsan'].includes(e.source)) sourceHub = 'South Korea';
-        if (['Ningbo', 'Shanghai'].includes(e.source)) sourceHub = 'Mainland China';
-        if (['Kaohsiung', 'Taoyuan'].includes(e.source)) sourceHub = 'Taiwan Hub';
-        if (['Nampo', 'Sinuiju'].includes(e.source)) sourceHub = 'North Korea Hub';
-        
-        list.push({ source: sourceHub, target: e.target, weight: e.weight, id: `g-${e.id}`, type: 'export', volume: e.weight * 300000 });
+      let sourceHub = 'Japan';
+      if (['Incheon', 'Ulsan'].includes(e.source)) sourceHub = 'South Korea';
+      if (['Ningbo', 'Shanghai'].includes(e.source)) sourceHub = 'Mainland China';
+      if (['Kaohsiung', 'Taoyuan'].includes(e.source)) sourceHub = 'Taiwan Hub';
+      if (['Nampo', 'Sinuiju'].includes(e.source)) sourceHub = 'North Korea Hub';
+
+      list.push({ source: sourceHub, target: e.target, weight: e.weight, id: `g-${e.id}`, type: 'export', volume: e.weight * 300000 });
     });
     return list;
   }, []);
@@ -543,7 +543,7 @@ export default function App() {
   const handleDragEnd = useCallback((info: any) => {
     if (draggingSource) {
       let target = info.object && !REFINERIES.includes(info.object.name) ? info.object.name : null;
-      
+
       if (!target && mousePos) {
         const threshold = 0.15;
         let minDist = threshold;
@@ -581,13 +581,13 @@ export default function App() {
 
   const activeNodes = useMemo(() => {
     if (viewMode === 'global') {
-       if (!hoveredNode) return new Set(globalNodes.map(n => n.name));
-       const connected = new Set<string>([hoveredNode]);
-       globalEdges.forEach(e => {
-         if (e.source === hoveredNode) connected.add(e.target);
-         if (e.target === hoveredNode) connected.add(e.source);
-       });
-       return connected;
+      if (!hoveredNode) return new Set(globalNodes.map(n => n.name));
+      const connected = new Set<string>([hoveredNode]);
+      globalEdges.forEach(e => {
+        if (e.source === hoveredNode) connected.add(e.target);
+        if (e.target === hoveredNode) connected.add(e.source);
+      });
+      return connected;
     }
 
     if (!hoveredNode) return new Set(nodes.map((n) => n.name));
@@ -614,7 +614,7 @@ export default function App() {
       if (!s || !t) return null;
       return {
         ...edge,
-        path: transportMode === 'ship' 
+        path: transportMode === 'ship'
           ? generateArcPath(s, t)
           : [s, t]
       };
@@ -630,7 +630,7 @@ export default function App() {
       if (!s || !t) return;
 
       const angle = (Math.atan2(t[1] - s[1], t[0] - s[0]) * 180) / Math.PI;
-      
+
       [0.33, 0.66].forEach(p => {
         markers.push({
           position: [s[0] + (t[0] - s[0]) * p, s[1] + (t[1] - s[1]) * p],
@@ -647,7 +647,7 @@ export default function App() {
   const exportMarkers = useMemo(() => {
     return EXPORT_EDGES.map(edge => {
       const s = LOCATIONS[edge.source];
-      const t = EXPORT_DESTINATIONS[edge.target] || LOCATIONS[edge.target] || [0,0];
+      const t = EXPORT_DESTINATIONS[edge.target] || LOCATIONS[edge.target] || [0, 0];
       if (!s) return null;
       return {
         position: [s[0] + (t[0] - s[0]) * 0.5, s[1] + (t[1] - s[1]) * 0.5],
@@ -670,24 +670,24 @@ export default function App() {
         return EXPORT_DESTINATIONS[d.target] || LOCATIONS[d.target] || HUB_COORDS[d.target] || [0, 0];
       },
       getSourceColor: (d: any) => {
-         const isActive = !hoveredNode || d.source === hoveredNode || d.target === hoveredNode;
-         const baseColor = d.source === 'Brazil Hub' ? [0, 155, 72] : 
-                          d.source === 'Iran Hub' ? [0, 100, 255] : COLOR_CRIMSON;
-         if (!isActive) return [baseColor[0], baseColor[1], baseColor[2], 20];
-         return [baseColor[0], baseColor[1], baseColor[2], d.type === 'import' ? 180 : 80];
+        const isActive = !hoveredNode || d.source === hoveredNode || d.target === hoveredNode;
+        const baseColor = d.source === 'Brazil Hub' ? [0, 155, 72] :
+          d.source === 'Iran Hub' ? [0, 100, 255] : COLOR_CRIMSON;
+        if (!isActive) return [baseColor[0], baseColor[1], baseColor[2], 20];
+        return [baseColor[0], baseColor[1], baseColor[2], d.type === 'import' ? 180 : 80];
       },
       getTargetColor: (d: any) => {
-         const isActive = !hoveredNode || d.source === hoveredNode || d.target === hoveredNode;
-         const baseColor = d.source === 'Brazil Hub' ? [0, 155, 72] : 
-                          d.source === 'Iran Hub' ? [0, 100, 255] : COLOR_CRIMSON;
-         if (!isActive) return [baseColor[0], baseColor[1], baseColor[2], 20];
-         return [baseColor[0], baseColor[1], baseColor[2], d.type === 'import' ? 80 : 180];
+        const isActive = !hoveredNode || d.source === hoveredNode || d.target === hoveredNode;
+        const baseColor = d.source === 'Brazil Hub' ? [0, 155, 72] :
+          d.source === 'Iran Hub' ? [0, 100, 255] : COLOR_CRIMSON;
+        if (!isActive) return [baseColor[0], baseColor[1], baseColor[2], 20];
+        return [baseColor[0], baseColor[1], baseColor[2], d.type === 'import' ? 80 : 180];
       },
       getWidth: (d: any) => {
-          // Volumetric Scaling: Logarithmic scale based on Volume (kl or barrels)
-          // intercontinental flows feel much thicker than regional ones.
-          const base = d.volume ? Math.max(1, Math.log10(d.volume) - 4) : d.weight;
-          return base * 2;
+        // Volumetric Scaling: Logarithmic scale based on Volume (kl or barrels)
+        // intercontinental flows feel much thicker than regional ones.
+        const base = d.volume ? Math.max(1, Math.log10(d.volume) - 4) : d.weight;
+        return base * 2;
       },
       visible: viewMode === 'global',
       updateTriggers: {
@@ -782,7 +782,7 @@ export default function App() {
       },
       getFilterValue: (d: any) => (hoveredNode && d.target !== hoveredNode ? 0 : 1),
     }),
-    
+
     // LAYER 2: IMPORT RIVERS HIGHLIGHT
     new ArcLayer({
       id: 'import-rivers-highlight',
@@ -813,7 +813,7 @@ export default function App() {
       widthMinPixels: 1,
       getDashArray: [8, 4],
       dashJustified: true,
-      extensions: [new PathStyleExtension({dash: true})],
+      extensions: [new PathStyleExtension({ dash: true })],
       visible: viewMode !== 'global',
       updateTriggers: {
         getColor: [hoveredNode]
@@ -870,12 +870,12 @@ export default function App() {
         getColor: [hoveredNode]
       }
     }),
-    
+
     // LAYER 7: DRAGGING LINE
     draggingSource && mousePos && new PathLayer({
       id: 'dragging-line',
       data: [{
-        path: transportMode === 'ship' 
+        path: transportMode === 'ship'
           ? generateArcPath(LOCATIONS[draggingSource as never], mousePos)
           : [LOCATIONS[draggingSource as never], mousePos]
       }],
@@ -904,7 +904,7 @@ export default function App() {
       getSize: (d: any) => {
         const stats = CENTRALITY[d.name];
         if (!stats) return 12;
-        return d.isRefinery 
+        return d.isRefinery
           ? 16 + (stats.betweenness * 6)
           : 10 + (stats.degree * 3);
       },
@@ -964,7 +964,7 @@ export default function App() {
               if (info.object.name === 'North Korea Hub') goToHub('northkorea');
             }
           }}
-          getCursor={({ isHovering, isDragging }) => 
+          getCursor={({ isHovering, isDragging }) =>
             viewMode === 'global' ? (isHovering ? 'pointer' : 'grab') : (isDragging ? 'grabbing' : isHovering ? 'pointer' : 'crosshair')
           }
         >
@@ -975,7 +975,7 @@ export default function App() {
       {/* SIDEBAR / MISSION CONTROL PANEL */}
       <div className="absolute top-0 left-0 h-full w-[280px] bg-black/60 border-r border-white/10 p-6 flex flex-col z-10 backdrop-blur-2xl">
         {viewMode !== 'global' && (
-          <button 
+          <button
             onClick={goToGlobalView}
             className="text-white/60 hover:text-white text-[9px] uppercase flex items-center gap-2 mb-8 border border-white/10 bg-white/5 px-3 py-1.5 rounded cursor-pointer transition-colors w-fit"
           >
@@ -989,11 +989,11 @@ export default function App() {
             HINOMARU COMMAND
           </h1>
           <div className="mt-2 text-[9px] text-white/30 uppercase tracking-[2px] border-l border-[#BC002D] pl-2">
-            HUB: {viewMode === 'global' ? 'GLOBAL_COORD' : 
-                  viewMode === 'japan' ? 'JAPAN_SECTOR' : 
-                  viewMode === 'korea' ? 'KOREA_SECTOR' : 
-                  viewMode === 'china' ? 'CHINA_SECTOR' : 
-                  viewMode === 'taiwan' ? 'TAIWAN_SECTOR' : 'DPRK_SECTOR'}
+            HUB: {viewMode === 'global' ? 'GLOBAL_COORD' :
+              viewMode === 'japan' ? 'JAPAN_SECTOR' :
+                viewMode === 'korea' ? 'KOREA_SECTOR' :
+                  viewMode === 'china' ? 'CHINA_SECTOR' :
+                    viewMode === 'taiwan' ? 'TAIWAN_SECTOR' : 'DPRK_SECTOR'}
           </div>
         </div>
 
@@ -1007,19 +1007,19 @@ export default function App() {
                 <Globe className="w-3 h-3 text-[#BC002D]" />
               </div>
               <div className="space-y-1">
-                {(viewMode === 'japan' ? JP_IMPORT_EDGES : 
-                  viewMode === 'korea' ? SK_IMPORT_EDGES : 
-                  viewMode === 'china' ? CN_IMPORT_EDGES : 
-                  viewMode === 'taiwan' ? TW_IMPORT_EDGES : []).filter(e => !hoveredNode || e.target === hoveredNode).map((edge, idx) => (
-                  <div key={idx} className="flex items-center justify-between py-1.5 px-1 hover:bg-white/5 rounded transition-colors group">
-                    <div className="flex items-center gap-2 text-[10px]">
-                      <span className="text-white/50 group-hover:text-white/80 transition-colors truncate max-w-[80px]">{edge.source}</span>
-                      <span className="text-[#BC002D]/40">→</span>
-                      <span className="text-white/80 group-hover:text-white transition-colors">{edge.target}</span>
-                    </div>
-                    <div className="text-[9px] text-[#BC002D] font-bold">LV.{edge.weight}</div>
-                  </div>
-                ))}
+                {(viewMode === 'japan' ? JP_IMPORT_EDGES :
+                  viewMode === 'korea' ? SK_IMPORT_EDGES :
+                    viewMode === 'china' ? CN_IMPORT_EDGES :
+                      viewMode === 'taiwan' ? TW_IMPORT_EDGES : []).filter(e => !hoveredNode || e.target === hoveredNode).map((edge, idx) => (
+                        <div key={idx} className="flex items-center justify-between py-1.5 px-1 hover:bg-white/5 rounded transition-colors group">
+                          <div className="flex items-center gap-2 text-[10px]">
+                            <span className="text-white/50 group-hover:text-white/80 transition-colors truncate max-w-[80px]">{edge.source}</span>
+                            <span className="text-[#BC002D]/40">→</span>
+                            <span className="text-white/80 group-hover:text-white transition-colors">{edge.target}</span>
+                          </div>
+                          <div className="text-[9px] text-[#BC002D] font-bold">LV.{edge.weight}</div>
+                        </div>
+                      ))}
               </div>
             </div>
 
@@ -1051,12 +1051,12 @@ export default function App() {
               </div>
               <div className="space-y-1">
                 {EXPORT_EDGES.filter(e => {
-                    if (viewMode === 'japan') return JP_REFINERIES.includes(e.source);
-                    if (viewMode === 'korea') return SK_REFINERIES.includes(e.source);
-                    if (viewMode === 'china') return CN_REFINERIES.includes(e.source);
-                    if (viewMode === 'taiwan') return TW_REFINERIES.includes(e.source);
-                    if (viewMode === 'northkorea') return NK_REFINERIES.includes(e.source);
-                    return false;
+                  if (viewMode === 'japan') return JP_REFINERIES.includes(e.source);
+                  if (viewMode === 'korea') return SK_REFINERIES.includes(e.source);
+                  if (viewMode === 'china') return CN_REFINERIES.includes(e.source);
+                  if (viewMode === 'taiwan') return TW_REFINERIES.includes(e.source);
+                  if (viewMode === 'northkorea') return NK_REFINERIES.includes(e.source);
+                  return false;
                 }).filter(e => !hoveredNode || e.source === hoveredNode).map((edge, idx) => (
                   <div key={idx} className="flex items-center justify-between py-1.5 px-1 hover:bg-white/5 rounded transition-colors group">
                     <div className="flex items-center gap-2 text-[10px]">
@@ -1075,24 +1075,22 @@ export default function App() {
         {/* TRANSPORT MODE SELECTOR */}
         <div className="mt-6 pt-6 border-t border-white/5">
           <div className="grid grid-cols-2 gap-2">
-            <button 
+            <button
               onClick={() => setTransportMode('ship')}
-              className={`flex items-center justify-center gap-2 py-3 rounded-[2px] border transition-all ${
-                transportMode === 'ship' 
-                ? 'bg-[#BC002D] border-[#BC002D] text-white shadow-[0_0_15px_rgba(188,0,45,0.4)]' 
+              className={`flex items-center justify-center gap-2 py-3 rounded-[2px] border transition-all ${transportMode === 'ship'
+                ? 'bg-[#BC002D] border-[#BC002D] text-white shadow-[0_0_15px_rgba(188,0,45,0.4)]'
                 : 'bg-white/5 border-white/10 text-white/30 hover:bg-white/10'
-              }`}
+                }`}
             >
               <Ship className="w-3.5 h-3.5" />
               <span className="text-[9px] font-bold tracking-widest uppercase">Sea</span>
             </button>
-            <button 
+            <button
               onClick={() => setTransportMode('truck')}
-              className={`flex items-center justify-center gap-2 py-3 rounded-[2px] border transition-all ${
-                transportMode === 'truck' 
-                ? 'bg-[#BC002D] border-[#BC002D] text-white shadow-[0_0_15px_rgba(188,0,45,0.4)]' 
+              className={`flex items-center justify-center gap-2 py-3 rounded-[2px] border transition-all ${transportMode === 'truck'
+                ? 'bg-[#BC002D] border-[#BC002D] text-white shadow-[0_0_15px_rgba(188,0,45,0.4)]'
                 : 'bg-white/5 border-white/10 text-white/30 hover:bg-white/10'
-              }`}
+                }`}
             >
               <Truck className="w-3.5 h-3.5" />
               <span className="text-[9px] font-bold tracking-widest uppercase">Land</span>
@@ -1100,7 +1098,7 @@ export default function App() {
           </div>
         </div>
       </div>
-      
+
       {/* STATUS BAR (Top Right) */}
       <div className="absolute top-6 right-6 z-10">
         <div className="flex items-center gap-3 hud-glass px-4 py-2 rounded-[2px] glossy-gradient text-[10px] uppercase font-bold tracking-[2.5px]">
@@ -1116,18 +1114,16 @@ export default function App() {
             <button
               key={hub.id}
               onClick={() => hub.id === 'global' ? goToGlobalView() : goToHub(hub.id as any)}
-              className={`flex items-center gap-2 px-3 py-1.5 rounded-[2px] transition-all duration-300 group ${
-                viewMode === hub.id 
-                  ? 'bg-[#BC002D] text-white shadow-[0_0_15px_rgba(188,0,45,0.3)]' 
-                  : 'hover:bg-white/5 text-white/40 hover:text-white'
-              }`}
+              className={`flex items-center gap-2 px-3 py-1.5 rounded-[2px] transition-all duration-300 group ${viewMode === hub.id
+                ? 'bg-[#BC002D] text-white shadow-[0_0_15px_rgba(188,0,45,0.3)]'
+                : 'hover:bg-white/5 text-white/40 hover:text-white'
+                }`}
             >
               <span className="text-[12px] filter grayscale group-hover:grayscale-0 transition-all">
                 {hub.flag}
               </span>
-              <span className={`text-[9px] uppercase font-bold tracking-[2px] overflow-hidden transition-all duration-300 ${
-                viewMode === hub.id ? 'max-w-[100px] opacity-100 ml-1' : 'max-w-0 opacity-0'
-              }`}>
+              <span className={`text-[9px] uppercase font-bold tracking-[2px] overflow-hidden transition-all duration-300 ${viewMode === hub.id ? 'max-w-[100px] opacity-100 ml-1' : 'max-w-0 opacity-0'
+                }`}>
                 {hub.name}
               </span>
             </button>
@@ -1141,12 +1137,12 @@ export default function App() {
           <div className="flex items-center gap-6">
             {teamNodes.map((team, idx) => (
               <div key={idx} className="flex items-center gap-2">
-                <div 
-                  className="w-2 h-2 rounded-full" 
-                  style={{ 
+                <div
+                  className="w-2 h-2 rounded-full"
+                  style={{
                     backgroundColor: team.assignee !== 'UNASSIGNED' ? `rgb(${team.color.join(',')})` : '#333',
                     boxShadow: team.assignee !== 'UNASSIGNED' ? `0 0 8px rgba(${team.color.join(',')}, 0.5)` : 'none'
-                  }} 
+                  }}
                 />
                 <span className="text-[9px] uppercase tracking-[1px] text-white/50">
                   {team.continent}: <span className={team.assignee !== 'UNASSIGNED' ? 'text-white' : 'text-white/20'}>{team.assignee}</span>
@@ -1157,28 +1153,28 @@ export default function App() {
         ) : (
           <div className="flex items-center gap-8">
             <div className="flex items-center gap-6 border-r border-white/10 pr-6">
-                {Object.entries(COMPANY_COLORS).filter(([name]) => {
-                    if (viewMode === 'japan') return ['ENEOS', 'Idemitsu', 'Cosmo'].includes(name);
-                    if (viewMode === 'korea') return ['SK Energy', 'GS Caltex', 'S-Oil', 'HD Hyundai'].includes(name);
-                    if (viewMode === 'china') return ['Sinopec', 'PetroChina', 'CNOOC'].includes(name);
-                    if (viewMode === 'taiwan') return ['CPC Corporation', 'Formosa Petro'].includes(name);
-                    if (viewMode === 'northkorea') return ['KPC State'].includes(name);
-                    return false;
-                }).map(([name, color], idx) => (
-                    <div key={idx} className="flex items-center gap-2">
-                        <div className="w-4 h-0.5" style={{ backgroundColor: `rgb(${color.join(',')})`, boxShadow: `0 0 8px rgba(${color.join(',')}, 0.5)` }} />
-                        <span className="text-[9px] uppercase tracking-[1px] text-white/60">{name}</span>
-                    </div>
-                ))}
+              {Object.entries(COMPANY_COLORS).filter(([name]) => {
+                if (viewMode === 'japan') return ['ENEOS', 'Idemitsu', 'Cosmo'].includes(name);
+                if (viewMode === 'korea') return ['SK Energy', 'GS Caltex', 'S-Oil', 'HD Hyundai'].includes(name);
+                if (viewMode === 'china') return ['Sinopec', 'PetroChina', 'CNOOC'].includes(name);
+                if (viewMode === 'taiwan') return ['CPC Corporation', 'Formosa Petro'].includes(name);
+                if (viewMode === 'northkorea') return ['KPC State'].includes(name);
+                return false;
+              }).map(([name, color], idx) => (
+                <div key={idx} className="flex items-center gap-2">
+                  <div className="w-4 h-0.5" style={{ backgroundColor: `rgb(${color.join(',')})`, boxShadow: `0 0 8px rgba(${color.join(',')}, 0.5)` }} />
+                  <span className="text-[9px] uppercase tracking-[1px] text-white/60">{name}</span>
+                </div>
+              ))}
             </div>
             <div className="flex items-center gap-6">
               <div className="flex items-center gap-2">
-                  <div className="w-2.5 h-2.5 border border-white/40 rotate-45" />
-                  <span className="text-[9px] uppercase tracking-[1px] text-white/40">Refinery</span>
+                <div className="w-2.5 h-2.5 border border-white/40 rotate-45" />
+                <span className="text-[9px] uppercase tracking-[1px] text-white/40">Refinery</span>
               </div>
               <div className="flex items-center gap-2">
-                  <div className="w-2.5 h-2.5 border border-white/40 rounded-full" />
-                  <span className="text-[9px] uppercase tracking-[1px] text-white/40">Terminal</span>
+                <div className="w-2.5 h-2.5 border border-white/40 rounded-full" />
+                <span className="text-[9px] uppercase tracking-[1px] text-white/40">Terminal</span>
               </div>
             </div>
           </div>
@@ -1211,20 +1207,20 @@ export default function App() {
                       <div className="h-full bg-white/20 w-[60%]" />
                     </div>
                   </div>
-                  
+
                   <div>
                     <div className="flex justify-between items-center text-[10px] mb-2 uppercase tracking-[1px]">
                       <span className="text-white/40">Influence Index</span>
                       <span className="text-white font-black">{CENTRALITY[hoverInfo.name].betweenness.toFixed(1)}</span>
                     </div>
                     <div className="h-1.5 bg-white/5 w-full rounded-full overflow-hidden border border-white/5">
-                      <div 
-                        className="h-full bg-gradient-to-r from-[#BC002D]/40 to-[#BC002D] shadow-[0_0_8px_#BC002D] transition-all duration-700 ease-out" 
-                        style={{ width: `${(CENTRALITY[hoverInfo.name].betweenness / 4) * 100}%` }} 
+                      <div
+                        className="h-full bg-gradient-to-r from-[#BC002D]/40 to-[#BC002D] shadow-[0_0_8px_#BC002D] transition-all duration-700 ease-out"
+                        style={{ width: `${(CENTRALITY[hoverInfo.name].betweenness / 4) * 100}%` }}
                       />
                     </div>
                   </div>
-                  
+
                   <div className="pt-2 border-t border-white/5">
                     <div className="flex justify-between items-center text-[10px] uppercase tracking-[1px]">
                       <span className="text-white/40">Eigen Influence</span>
@@ -1239,8 +1235,8 @@ export default function App() {
                   Imperial Operations Center. Global import/export coordination active.
                 </div>
                 <div className="flex items-center gap-3 bg-[#BC002D]/10 px-4 py-3 border border-[#BC002D]/30 border-l-4">
-                   <div className="w-2 h-2 bg-[#BC002D] animate-ping rounded-full" />
-                   <span className="text-[10px] font-black uppercase tracking-[2px] text-white">Focus Target Lock [Available]</span>
+                  <div className="w-2 h-2 bg-[#BC002D] animate-ping rounded-full" />
+                  <span className="text-[10px] font-black uppercase tracking-[2px] text-white">Focus Target Lock [Available]</span>
                 </div>
               </div>
             ) : (
@@ -1252,8 +1248,8 @@ export default function App() {
                   <div className="flex justify-between items-center text-[9px] uppercase tracking-[1px] mb-1">
                     <span className="text-white/30">Transfer Volume</span>
                     <span className="text-white font-bold">LV. {
-                      IMPORT_SOURCES[hoverInfo.name] 
-                        ? currentImports.find((e: any) => e.source === hoverInfo.name)?.weight 
+                      IMPORT_SOURCES[hoverInfo.name]
+                        ? currentImports.find((e: any) => e.source === hoverInfo.name)?.weight
                         : EXPORT_EDGES.find((e: any) => e.target === hoverInfo.name)?.weight
                     }</span>
                   </div>
