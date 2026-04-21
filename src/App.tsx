@@ -66,6 +66,56 @@ const IMPORT_SOURCES: Record<string, [number, number]> = {
   'Singapore': [103.8, 1.35],
   'Thailand': [100.5, 13.7],
   'Israel': [34.8, 31.0],
+  'Australia': [133.8, -25.3],
+  'Belgium': [4.5, 50.5],
+  'Chile': [-71.5, -35.7],
+  'Colombia': [-74.3, 4.6],
+  'Denmark': [9.5, 56.3],
+  'Finland': [25.7, 61.9],
+  'France': [2.2, 46.2],
+  'Germany': [10.5, 51.2],
+  'Indonesia': [113.9, -0.8],
+  'Ireland': [-8.2, 53.4],
+  'Italy': [12.6, 41.9],
+  'Lithuania': [23.9, 55.2],
+  'Nicaragua': [-85.2, 12.9],
+  'Nigeria': [8.7, 9.1],
+  'Norway': [8.5, 60.5],
+  'Pakistan': [69.3, 30.4],
+  'Panama': [-80.8, 8.5],
+  'Peru': [-75.0, -9.2],
+  'Poland': [19.1, 51.9],
+  'Portugal': [-8.2, 39.4],
+  'South Africa': [22.9, -30.6],
+  'Sweden': [18.6, 60.1],
+  'Switzerland': [8.2, 46.8],
+  'United Kingdom': [-3.4, 55.4],
+  'Uruguay': [-55.8, -32.5],
+  'Vietnam': [108.3, 14.1],
+  'Turkey': [35.2, 39.0],
+  'Dominican Republic': [-70.2, 18.7],
+  'Cayman Islands': [-80.7, 19.3],
+  'Honduras': [-86.2, 15.2],
+  'Algeria': [1.7, 28.0],
+  'Argentina': [-63.6, -38.4],
+  'Aruba': [-70.0, 12.5],
+  'Bahamas': [-77.4, 25.0],
+  'Belarus': [28.0, 53.7],
+  'Bermuda': [-64.8, 32.3],
+  'Croatia': [15.2, 45.1],
+  'Curacao': [-69.0, 12.2],
+  'El Salvador': [-88.9, 13.8],
+  'Greece': [21.8, 39.1],
+  'Jamaica': [-77.3, 18.1],
+  'Liberia': [-9.4, 6.4],
+  'Martinique': [-61.0, 14.6],
+  'New Zealand': [174.9, -40.9],
+  'Papua New Guinea': [144.0, -6.3],
+  'St Lucia': [-61.0, 13.9],
+  'Ukraine': [31.2, 48.4],
+  'Afghanistan': [67.7, 33.9],
+  'Iraq': [43.7, 33.2],
+  'Qatar': [51.2, 25.4],
 };
 
 const EXPORT_DESTINATIONS: Record<string, [number, number]> = {
@@ -491,17 +541,60 @@ export default function App() {
     list.push({ source: 'Brazil Hub', target: 'Singapore', weight: 2, id: 'g-br-sg', type: 'export', volume: 3999507 });
     list.push({ source: 'Brazil Hub', target: 'Thailand', weight: 1, id: 'g-br-th', type: 'export', volume: 669053 });
     list.push({ source: 'Brazil Hub', target: 'Israel', weight: 1, id: 'g-br-il', type: 'export', volume: 533267 });
+    list.push({ source: 'Brazil Hub', target: 'UAE', weight: 1, id: 'g-br-ae', type: 'export', volume: 201209 });
+    list.push({ source: 'Brazil Hub', target: 'Qatar', weight: 1, id: 'g-br-qa', type: 'export', volume: 118503 });
+    list.push({ source: 'Brazil Hub', target: 'Indonesia', weight: 1, id: 'g-br-id', type: 'export', volume: 194297 });
+    list.push({ source: 'Brazil Hub', target: 'Jamaica', weight: 1, id: 'g-br-jm', type: 'export', volume: 330823 });
+    list.push({ source: 'Brazil Hub', target: 'St Lucia', weight: 1, id: 'g-br-sl', type: 'export', volume: 137267 });
+    list.push({ source: 'Brazil Hub', target: 'France', weight: 2, id: 'g-br-fr', type: 'export', volume: 1340575 });
+    list.push({ source: 'Brazil Hub', target: 'Italy', weight: 1, id: 'g-br-it', type: 'export', volume: 802370 });
+    list.push({ source: 'Brazil Hub', target: 'Germany', weight: 1, id: 'g-br-de', type: 'export', volume: 762868 });
+    list.push({ source: 'Brazil Hub', target: 'United Kingdom', weight: 1, id: 'g-br-uk', type: 'export', volume: 29379 });
 
     // IRAN EXPORTS
     list.push({ source: 'Iran Hub', target: 'Mainland China', weight: 4, id: 'g-ir-cn', type: 'export', volume: 4530000 });
     list.push({ source: 'Iran Hub', target: 'UAE', weight: 5, id: 'g-ir-ae', type: 'export', volume: 27670000 });
     list.push({ source: 'Iran Hub', target: 'Oman', weight: 3, id: 'g-ir-om', type: 'export', volume: 2900000 });
     list.push({ source: 'Iran Hub', target: 'India', weight: 2, id: 'g-ir-in', type: 'export', volume: 1060000 });
+    list.push({ source: 'Iran Hub', target: 'Afghanistan', weight: 2, id: 'g-ir-af', type: 'export', volume: 1630000 });
+    list.push({ source: 'Iran Hub', target: 'Pakistan', weight: 2, id: 'g-ir-pk', type: 'export', volume: 1240000 });
+    list.push({ source: 'Iran Hub', target: 'Iraq', weight: 1, id: 'g-ir-iq', type: 'export', volume: 800000 });
 
-    // USA EXPORTS
+    // USA EXPORTS (Comprehensive Saturation)
     list.push({ source: 'USA Hub', target: 'South Korea', weight: 5, id: 'g-us-sk', type: 'export', volume: 176208062 });
     list.push({ source: 'USA Hub', target: 'Mainland China', weight: 3, id: 'g-us-cn', type: 'export', volume: 8148860 });
     list.push({ source: 'USA Hub', target: 'Canada', weight: 4, id: 'g-us-ca', type: 'export', volume: 92472582 });
+    list.push({ source: 'USA Hub', target: 'Netherlands Hub', weight: 5, id: 'g-us-nl', type: 'export', volume: 306952849 });
+    list.push({ source: 'USA Hub', target: 'Taiwan Hub', weight: 4, id: 'g-us-tw', type: 'export', volume: 76045198 });
+    list.push({ source: 'USA Hub', target: 'United Kingdom', weight: 4, id: 'g-us-uk', type: 'export', volume: 63507363 });
+    list.push({ source: 'USA Hub', target: 'Brazil Hub', weight: 4, id: 'g-us-br', type: 'export', volume: 23249738 });
+    list.push({ source: 'USA Hub', target: 'Japan', weight: 4, id: 'g-us-jp', type: 'export', volume: 36954828 });
+    list.push({ source: 'USA Hub', target: 'India', weight: 4, id: 'g-us-in', type: 'export', volume: 112546350 });
+    list.push({ source: 'USA Hub', target: 'Mexico', weight: 4, id: 'g-us-mx', type: 'export', volume: 4442665 });
+    list.push({ source: 'USA Hub', target: 'Germany', weight: 3, id: 'g-us-de', type: 'export', volume: 38322400 });
+    list.push({ source: 'USA Hub', target: 'France', weight: 3, id: 'g-us-fr', type: 'export', volume: 41663463 });
+    list.push({ source: 'USA Hub', target: 'Italy', weight: 3, id: 'g-us-it', type: 'export', volume: 38558504 });
+    list.push({ source: 'USA Hub', target: 'Belgium', weight: 2, id: 'g-us-be', type: 'export', volume: 61120 });
+    list.push({ source: 'USA Hub', target: 'Nigeria', weight: 3, id: 'g-us-ng', type: 'export', volume: 38790702 });
+    list.push({ source: 'USA Hub', target: 'Norway', weight: 2, id: 'g-us-no', type: 'export', volume: 7352121 });
+    list.push({ source: 'USA Hub', target: 'Spain Hub', weight: 4, id: 'g-us-es', type: 'export', volume: 64872817 });
+    list.push({ source: 'USA Hub', target: 'Australia', weight: 2, id: 'g-us-au', type: 'export', volume: 7686035 });
+    list.push({ source: 'USA Hub', target: 'Thailand', weight: 3, id: 'g-us-th', type: 'export', volume: 50843028 });
+    list.push({ source: 'USA Hub', target: 'Singapore', weight: 4, id: 'g-us-sg', type: 'export', volume: 21774958 });
+    list.push({ source: 'USA Hub', target: 'Ireland', weight: 3, id: 'g-us-ie', type: 'export', volume: 12182729 });
+    list.push({ source: 'USA Hub', target: 'Peru', weight: 2, id: 'g-us-pe', type: 'export', volume: 14476069 });
+    list.push({ source: 'USA Hub', target: 'Poland', weight: 2, id: 'g-us-pl', type: 'export', volume: 5501607 });
+    list.push({ source: 'USA Hub', target: 'Turkey', weight: 2, id: 'g-us-tr', type: 'export', volume: 1107771 });
+    list.push({ source: 'USA Hub', target: 'Vietnam', weight: 2, id: 'g-us-vn', type: 'export', volume: 992577 });
+    list.push({ source: 'USA Hub', target: 'Dominican Republic', weight: 2, id: 'g-us-dr', type: 'export', volume: 7752193 });
+    list.push({ source: 'USA Hub', target: 'Panama', weight: 2, id: 'g-us-pa', type: 'export', volume: 7515655 });
+    list.push({ source: 'USA Hub', target: 'Pakistan', weight: 2, id: 'g-us-pk', type: 'export', volume: 2908913 });
+    list.push({ source: 'USA Hub', target: 'Denmark', weight: 2, id: 'g-us-dk', type: 'export', volume: 11110963 });
+    list.push({ source: 'USA Hub', target: 'Finland', weight: 2, id: 'g-us-fi', type: 'export', volume: 6237950 });
+    list.push({ source: 'USA Hub', target: 'Ukraine', weight: 1, id: 'g-us-ua', type: 'export', volume: 1711266 });
+    list.push({ source: 'USA Hub', target: 'Greece', weight: 1, id: 'g-us-gr', type: 'export', volume: 321 });
+    list.push({ source: 'USA Hub', target: 'Hong Kong', weight: 1, id: 'g-us-hk', type: 'export', volume: 372298 });
+    list.push({ source: 'USA Hub', target: 'Israel', weight: 1, id: 'g-us-il', type: 'export', volume: 703070 });
 
     EXPORT_EDGES.forEach(e => {
       let sourceHub = 'Japan';
