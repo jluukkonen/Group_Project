@@ -105,33 +105,35 @@ const App: React.FC = () => {
     const list: any[] = [];
     
     // BRAZIL EXPORTS
-    list.push({ source: 'Brazil Hub', target: 'Mainland China', weight: 5, id: 'g-br-cn', volume: 49376633 });
-    list.push({ source: 'Brazil Hub', target: 'Spain Hub', weight: 3, id: 'g-br-es', volume: 11628197 });
-    list.push({ source: 'Brazil Hub', target: 'Netherlands Hub', weight: 2, id: 'g-br-nl', volume: 8023702 });
-    list.push({ source: 'Brazil Hub', target: 'USA Hub', weight: 4, id: 'g-br-us', volume: 14442665 });
-    list.push({ source: 'Brazil Hub', target: 'South Korea', weight: 3, id: 'g-br-sk', volume: 3160104 });
-    list.push({ source: 'Brazil Hub', target: 'UAE', weight: 1, id: 'g-br-ae', volume: 201209 });
+    list.push({ source: 'Brazil Hub', target: 'Mainland China', id: 'g-br-cn', volume: 49376633 });
+    list.push({ source: 'Brazil Hub', target: 'Spain Hub', id: 'g-br-es', volume: 11628197 });
+    list.push({ source: 'Brazil Hub', target: 'Netherlands Hub', id: 'g-br-nl', volume: 8023702 });
+    list.push({ source: 'Brazil Hub', target: 'USA Hub', id: 'g-br-us', volume: 14442665 });
+    list.push({ source: 'Brazil Hub', target: 'South Korea', id: 'g-br-sk', volume: 3160104 });
+    list.push({ source: 'Brazil Hub', target: 'UAE', id: 'g-br-ae', volume: 201209 });
 
     // IRAN EXPORTS
-    list.push({ source: 'Iran Hub', target: 'Mainland China', weight: 4, id: 'g-ir-cn', volume: 4530000 });
-    list.push({ source: 'Iran Hub', target: 'UAE', weight: 5, id: 'g-ir-ae', volume: 27670000 });
-    list.push({ source: 'Iran Hub', target: 'Oman', weight: 3, id: 'g-ir-om', volume: 2900000 });
-    list.push({ source: 'Iran Hub', target: 'Pakistan', weight: 2, id: 'g-ir-pk', volume: 1240000 });
+    list.push({ source: 'Iran Hub', target: 'Mainland China', id: 'g-ir-cn', volume: 4530000 });
+    list.push({ source: 'Iran Hub', target: 'UAE', id: 'g-ir-ae', volume: 27670000 });
+    list.push({ source: 'Iran Hub', target: 'Oman', id: 'g-ir-om', volume: 2900000 });
+    list.push({ source: 'Iran Hub', target: 'Pakistan', id: 'g-ir-pk', volume: 1240000 });
 
     // USA EXPORTS (The Truth)
-    list.push({ source: 'USA Hub', target: 'South Korea', weight: 5, id: 'g-us-sk', volume: 176208062 });
-    list.push({ source: 'USA Hub', target: 'Mainland China', weight: 3, id: 'g-us-cn', volume: 8148860 });
-    list.push({ source: 'USA Hub', target: 'Canada', weight: 4, id: 'g-us-ca', volume: 92472582 });
-    list.push({ source: 'USA Hub', target: 'Netherlands Hub', weight: 5, id: 'g-us-nl', volume: 306952849 });
-    list.push({ source: 'USA Hub', target: 'Taiwan Hub', weight: 4, id: 'g-us-tw', volume: 76045198 });
-    list.push({ source: 'USA Hub', target: 'United Kingdom', weight: 4, id: 'g-us-uk', volume: 63507363 });
-    list.push({ source: 'USA Hub', target: 'Japan', weight: 4, id: 'g-us-jp', volume: 36954828 });
-    list.push({ source: 'USA Hub', target: 'India', weight: 4, id: 'g-us-in', volume: 112546350 });
-    list.push({ source: 'USA Hub', target: 'Germany', weight: 3, id: 'g-us-de', volume: 38322400 });
+    list.push({ source: 'USA Hub', target: 'South Korea', id: 'g-us-sk', volume: 176208062 });
+    list.push({ source: 'USA Hub', target: 'Mainland China', id: 'g-us-cn', volume: 8148860 });
+    list.push({ source: 'USA Hub', target: 'Canada', id: 'g-us-ca', volume: 92472582 });
+    list.push({ source: 'USA Hub', target: 'Netherlands Hub', id: 'g-us-nl', volume: 306952849 });
+    list.push({ source: 'USA Hub', target: 'Taiwan Hub', id: 'g-us-tw', volume: 76045198 });
+    list.push({ source: 'USA Hub', target: 'United Kingdom', id: 'g-us-uk', volume: 63507363 });
+    list.push({ source: 'USA Hub', target: 'Japan', id: 'g-us-jp', volume: 36954828 });
+    list.push({ source: 'USA Hub', target: 'India', id: 'g-us-in', volume: 112546350 });
+    list.push({ source: 'USA Hub', target: 'Germany', id: 'g-us-de', volume: 38322400 });
 
     // MIDDLE EAST STRATEGIC IMPORTS
-    list.push({ source: 'Saudi Arabia', target: 'Japan', weight: 5, id: 'g-sa-jp', volume: 50000000 });
-    list.push({ source: 'Kuwait', target: 'South Korea', weight: 4, id: 'g-ku-sk', volume: 30000000 });
+    list.push({ source: 'Saudi Arabia', target: 'Japan', id: 'g-sa-jp', volume: 6000375 });
+    list.push({ source: 'UAE', target: 'Japan', id: 'g-uae-jp', volume: 1415982 });
+    list.push({ source: 'Kuwait', target: 'South Korea', id: 'g-ku-sk', volume: 1200000 });
+    list.push({ source: 'Kuwait', target: 'Japan', id: 'g-ku-jp', volume: 611905 });
 
     return list;
   }, []);
