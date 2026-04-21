@@ -24,8 +24,8 @@ export const TEAM_ASSIGNMENTS = {
     radius: 2500000
   },
   "Africa": {
-    assignee: "UNASSIGNED",
-    color: [80, 80, 80],
+    assignee: "TUOMAS",
+    color: [0, 255, 0],
     centroid: [20.0, 5.0],
     radius: 4500000
   },
