@@ -57,6 +57,15 @@ const IMPORT_SOURCES: Record<string, [number, number]> = {
   'Kuwait': [48.0, 29.4],
   'USA Houston': [-95.0, 29.7],
   'Russia Kozmino': [132.9, 42.7],
+  'Spain Hub': [-3.7, 40.4],
+  'Netherlands Hub': [4.9, 52.4],
+  'Oman': [58.4, 23.6],
+  'India': [77.2, 28.6],
+  'Canada': [-96.8, 49.8],
+  'Malaysia': [101.7, 3.1],
+  'Singapore': [103.8, 1.35],
+  'Thailand': [100.5, 13.7],
+  'Israel': [34.8, 31.0],
 };
 
 const EXPORT_DESTINATIONS: Record<string, [number, number]> = {
@@ -220,12 +229,19 @@ const MACRO_CHINA: [number, number] = [121.5, 31.0];
 const MACRO_TAIWAN: [number, number] = [121.0, 23.7];
 const MACRO_NORTH_KOREA: [number, number] = [126.5, 40.0];
 
+const MACRO_BRAZIL: [number, number] = [-43.2, -22.9];
+const MACRO_IRAN: [number, number] = [50.3, 29.2];
+const MACRO_USA: [number, number] = [-95.4, 29.8];
+
 const HUB_COORDS: Record<string, [number, number]> = {
   'Japan': MACRO_JAPAN,
   'South Korea': MACRO_KOREA,
   'Mainland China': MACRO_CHINA,
   'Taiwan Hub': MACRO_TAIWAN,
-  'North Korea Hub': MACRO_NORTH_KOREA
+  'North Korea Hub': MACRO_NORTH_KOREA,
+  'Brazil Hub': MACRO_BRAZIL,
+  'Iran Hub': MACRO_IRAN,
+  'USA Hub': MACRO_USA
 };
 
 const HUBS = [
@@ -235,6 +251,8 @@ const HUBS = [
   { id: 'china', name: 'Mainland China', flag: '🇨🇳' },
   { id: 'taiwan', name: 'Taiwan', flag: '🇹🇼' },
   { id: 'northkorea', name: 'North Korea', flag: '🇰🇵' },
+  { id: 'brazil', name: 'Brazil Hub', flag: '🇧🇷' },
+  { id: 'iran', name: 'Iran Hub', flag: '🇮🇷' },
 ];
 
 const VIEW_STATES = {
@@ -459,8 +477,32 @@ export default function App() {
         list.push({ source: e.source, target: 'Mainland China', weight: e.weight, id: `g-${e.id}`, type: 'import' });
     });
     TW_IMPORT_EDGES.forEach(e => {
-        list.push({ source: e.source, target: 'Taiwan Hub', weight: e.weight, id: `g-${e.id}`, type: 'import' });
+        list.push({ source: e.source, target: 'Taiwan Hub', weight: e.weight, id: `g-${e.id}`, type: 'import', volume: e.weight * 500000 });
     });
+    
+    // --- NEW GLOBAL SILK ROAD ---
+    // BRAZIL EXPORTS
+    list.push({ source: 'Brazil Hub', target: 'Mainland China', weight: 5, id: 'g-br-cn', type: 'export', volume: 49376633 });
+    list.push({ source: 'Brazil Hub', target: 'Spain Hub', weight: 3, id: 'g-br-es', type: 'export', volume: 11628197 });
+    list.push({ source: 'Brazil Hub', target: 'Netherlands Hub', weight: 2, id: 'g-br-nl', type: 'export', volume: 8023702 });
+    list.push({ source: 'Brazil Hub', target: 'USA Hub', weight: 4, id: 'g-br-us', type: 'export', volume: 14442665 });
+    list.push({ source: 'Brazil Hub', target: 'South Korea', weight: 3, id: 'g-br-sk', type: 'export', volume: 3160104 });
+    list.push({ source: 'Brazil Hub', target: 'Malaysia', weight: 2, id: 'g-br-my', type: 'export', volume: 2987286 });
+    list.push({ source: 'Brazil Hub', target: 'Singapore', weight: 2, id: 'g-br-sg', type: 'export', volume: 3999507 });
+    list.push({ source: 'Brazil Hub', target: 'Thailand', weight: 1, id: 'g-br-th', type: 'export', volume: 669053 });
+    list.push({ source: 'Brazil Hub', target: 'Israel', weight: 1, id: 'g-br-il', type: 'export', volume: 533267 });
+
+    // IRAN EXPORTS
+    list.push({ source: 'Iran Hub', target: 'Mainland China', weight: 4, id: 'g-ir-cn', type: 'export', volume: 4530000 });
+    list.push({ source: 'Iran Hub', target: 'UAE', weight: 5, id: 'g-ir-ae', type: 'export', volume: 27670000 });
+    list.push({ source: 'Iran Hub', target: 'Oman', weight: 3, id: 'g-ir-om', type: 'export', volume: 2900000 });
+    list.push({ source: 'Iran Hub', target: 'India', weight: 2, id: 'g-ir-in', type: 'export', volume: 1060000 });
+
+    // USA EXPORTS
+    list.push({ source: 'USA Hub', target: 'South Korea', weight: 5, id: 'g-us-sk', type: 'export', volume: 176208062 });
+    list.push({ source: 'USA Hub', target: 'Mainland China', weight: 3, id: 'g-us-cn', type: 'export', volume: 8148860 });
+    list.push({ source: 'USA Hub', target: 'Canada', weight: 4, id: 'g-us-ca', type: 'export', volume: 92472582 });
+
     EXPORT_EDGES.forEach(e => {
         let sourceHub = 'Japan';
         if (['Incheon', 'Ulsan'].includes(e.source)) sourceHub = 'South Korea';
@@ -468,7 +510,7 @@ export default function App() {
         if (['Kaohsiung', 'Taoyuan'].includes(e.source)) sourceHub = 'Taiwan Hub';
         if (['Nampo', 'Sinuiju'].includes(e.source)) sourceHub = 'North Korea Hub';
         
-        list.push({ source: sourceHub, target: e.target, weight: e.weight, id: `g-${e.id}`, type: 'export' });
+        list.push({ source: sourceHub, target: e.target, weight: e.weight, id: `g-${e.id}`, type: 'export', volume: e.weight * 300000 });
     });
     return list;
   }, []);
@@ -625,19 +667,28 @@ export default function App() {
       },
       getTargetPosition: (d: any) => {
         if (d.type === 'import') return HUB_COORDS[d.target] || MACRO_JAPAN;
-        return EXPORT_DESTINATIONS[d.target] || LOCATIONS[d.target] || [0, 0];
+        return EXPORT_DESTINATIONS[d.target] || LOCATIONS[d.target] || HUB_COORDS[d.target] || [0, 0];
       },
       getSourceColor: (d: any) => {
          const isActive = !hoveredNode || d.source === hoveredNode || d.target === hoveredNode;
-         if (!isActive) return [COLOR_CRIMSON[0], COLOR_CRIMSON[1], COLOR_CRIMSON[2], 20];
-         return [COLOR_CRIMSON[0], COLOR_CRIMSON[1], COLOR_CRIMSON[2], d.type === 'import' ? 180 : 80];
+         const baseColor = d.source === 'Brazil Hub' ? [0, 155, 72] : 
+                          d.source === 'Iran Hub' ? [0, 100, 255] : COLOR_CRIMSON;
+         if (!isActive) return [baseColor[0], baseColor[1], baseColor[2], 20];
+         return [baseColor[0], baseColor[1], baseColor[2], d.type === 'import' ? 180 : 80];
       },
       getTargetColor: (d: any) => {
          const isActive = !hoveredNode || d.source === hoveredNode || d.target === hoveredNode;
-         if (!isActive) return [COLOR_CRIMSON[0], COLOR_CRIMSON[1], COLOR_CRIMSON[2], 20];
-         return [COLOR_CRIMSON[0], COLOR_CRIMSON[1], COLOR_CRIMSON[2], d.type === 'import' ? 80 : 180];
+         const baseColor = d.source === 'Brazil Hub' ? [0, 155, 72] : 
+                          d.source === 'Iran Hub' ? [0, 100, 255] : COLOR_CRIMSON;
+         if (!isActive) return [baseColor[0], baseColor[1], baseColor[2], 20];
+         return [baseColor[0], baseColor[1], baseColor[2], d.type === 'import' ? 80 : 180];
       },
-      getWidth: (d: any) => d.weight * 1.5,
+      getWidth: (d: any) => {
+          // Volumetric Scaling: Logarithmic scale based on Volume (kl or barrels)
+          // intercontinental flows feel much thicker than regional ones.
+          const base = d.volume ? Math.max(1, Math.log10(d.volume) - 4) : d.weight;
+          return base * 2;
+      },
       visible: viewMode === 'global',
       updateTriggers: {
         getSourceColor: [hoveredNode],
