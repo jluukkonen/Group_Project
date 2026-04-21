@@ -3,10 +3,10 @@ import DeckGL from '@deck.gl/react';
 import { ArcLayer, TextLayer } from 'deck.gl';
 import { Map } from 'react-map-gl/maplibre';
 import 'maplibre-gl/dist/maplibre-gl.css';
-import { Globe, Droplets, Ship } from 'lucide-react';
+import { Globe, Droplets } from 'lucide-react';
 import { TEAM_ASSIGNMENTS } from './team_config';
 
-// --- STRATEGIC COORDINATE REGISTRY ---
+// --- GLOBAL STRATEGIC COORDS (BBL Standard) ---
 
 const LOCATIONS: Record<string, [number, number]> = {
   'Spain Hub': [-3.7, 40.4],
@@ -20,77 +20,41 @@ const LOCATIONS: Record<string, [number, number]> = {
   'Israel': [34.8, 31.0],
   'Australia': [133.8, -25.3],
   'Belgium': [4.5, 50.5],
-  'Chile': [-71.5, -35.7],
-  'Colombia': [-74.3, 4.6],
-  'Denmark': [9.5, 56.3],
-  'Finland': [25.7, 61.9],
   'France': [2.2, 46.2],
   'Germany': [10.5, 51.2],
   'Indonesia': [113.9, -0.8],
-  'Ireland': [-8.2, 53.4],
   'Italy': [12.6, 41.9],
-  'Lithuania': [23.9, 55.2],
-  'Nicaragua': [-85.2, 12.9],
   'Nigeria': [8.7, 9.1],
   'Norway': [8.5, 60.5],
   'Pakistan': [69.3, 30.4],
-  'Panama': [-80.8, 8.5],
-  'Peru': [-75.0, -9.2],
-  'Poland': [19.1, 51.9],
-  'Portugal': [-8.2, 39.4],
-  'South Africa': [22.9, -30.6],
-  'Sweden': [18.6, 60.1],
-  'Switzerland': [8.2, 46.8],
   'United Kingdom': [-3.4, 55.4],
-  'Uruguay': [-55.8, -32.5],
   'Vietnam': [108.3, 14.1],
   'Turkey': [35.2, 39.0],
-  'Dominican Republic': [-70.2, 18.7],
-  'Cayman Islands': [-80.7, 19.3],
-  'Honduras': [-86.2, 15.2],
   'Algeria': [1.7, 28.0],
   'Argentina': [-63.6, -38.4],
-  'Aruba': [-70.0, 12.5],
-  'Bahamas': [-77.4, 25.0],
-  'Belarus': [28.0, 53.7],
-  'Bermuda': [-64.8, 32.3],
-  'Croatia': [15.2, 45.1],
-  'Curacao': [-69.0, 12.2],
-  'El Salvador': [-88.9, 13.8],
-  'Greece': [21.8, 39.1],
-  'Jamaica': [-77.3, 18.1],
-  'Liberia': [-9.4, 6.4],
-  'Martinique': [-61.0, 14.6],
-  'New Zealand': [174.9, -40.9],
-  'Papua New Guinea': [144.0, -6.3],
-  'St Lucia': [-61.0, 13.9],
-  'Ukraine': [31.2, 48.4],
-  'Afghanistan': [67.7, 33.9],
-  'Iraq': [43.7, 33.2],
-  'Qatar': [51.2, 25.4],
-  'UAE': [53.8, 23.4],
   'Saudi Arabia': [45.1, 23.9],
   'Kuwait': [48.0, 29.4],
+  'UAE': [53.8, 23.4],
+  'Russia Kozmino': [132.9, 42.7],
 };
 
 const HUB_COORDS: Record<string, [number, number]> = {
-  'Japan': [137.0, 36.0],
+  'Japan': [138.0, 36.5],
   'South Korea': [128.0, 36.5],
   'Mainland China': [121.5, 31.0],
   'Taiwan Hub': [121.0, 23.7],
   'Brazil Hub': [-43.2, -22.9],
   'Iran Hub': [50.3, 29.2],
-  'USA Hub': [-95.4, 29.8]
+  'USA Hub': [-98.5, 31.5]
 };
 
 const VIEW_STATES = {
   global: {
-    longitude: 30.0,
+    longitude: 20.0,
     latitude: 25.0,
     zoom: 1.8,
     pitch: 0,
     bearing: 0,
-    transitionDuration: 1500
   }
 };
 
@@ -103,37 +67,37 @@ const App: React.FC = () => {
 
   const globalEdges = useMemo(() => {
     const list: any[] = [];
+    const BBL_CONV = 6.2898;
     
-    // BRAZIL EXPORTS
-    list.push({ source: 'Brazil Hub', target: 'Mainland China', id: 'g-br-cn', volume: 49376633 });
-    list.push({ source: 'Brazil Hub', target: 'Spain Hub', id: 'g-br-es', volume: 11628197 });
-    list.push({ source: 'Brazil Hub', target: 'Netherlands Hub', id: 'g-br-nl', volume: 8023702 });
-    list.push({ source: 'Brazil Hub', target: 'USA Hub', id: 'g-br-us', volume: 14442665 });
-    list.push({ source: 'Brazil Hub', target: 'South Korea', id: 'g-br-sk', volume: 3160104 });
-    list.push({ source: 'Brazil Hub', target: 'UAE', id: 'g-br-ae', volume: 201209 });
+    // BRAZIL EXPORTS (Converted KL to BBL)
+    list.push({ source: 'Brazil Hub', target: 'Mainland China', id: 'g-br-cn', volume: 49376633 * BBL_CONV });
+    list.push({ source: 'Brazil Hub', target: 'Spain Hub', id: 'g-br-es', volume: 11628197 * BBL_CONV });
+    list.push({ source: 'Brazil Hub', target: 'Netherlands Hub', id: 'g-br-nl', volume: 8023702 * BBL_CONV });
+    list.push({ source: 'Brazil Hub', target: 'USA Hub', id: 'g-br-us', volume: 14442665 * BBL_CONV });
+    list.push({ source: 'Brazil Hub', target: 'South Korea', id: 'g-br-sk', volume: 3160104 * BBL_CONV });
 
-    // IRAN EXPORTS
+    // IRAN EXPORTS (Already in BBL)
     list.push({ source: 'Iran Hub', target: 'Mainland China', id: 'g-ir-cn', volume: 4530000 });
     list.push({ source: 'Iran Hub', target: 'UAE', id: 'g-ir-ae', volume: 27670000 });
     list.push({ source: 'Iran Hub', target: 'Oman', id: 'g-ir-om', volume: 2900000 });
     list.push({ source: 'Iran Hub', target: 'Pakistan', id: 'g-ir-pk', volume: 1240000 });
 
-    // USA EXPORTS (The Truth)
-    list.push({ source: 'USA Hub', target: 'South Korea', id: 'g-us-sk', volume: 176208062 });
-    list.push({ source: 'USA Hub', target: 'Mainland China', id: 'g-us-cn', volume: 8148860 });
-    list.push({ source: 'USA Hub', target: 'Canada', id: 'g-us-ca', volume: 92472582 });
-    list.push({ source: 'USA Hub', target: 'Netherlands Hub', id: 'g-us-nl', volume: 306952849 });
-    list.push({ source: 'USA Hub', target: 'Taiwan Hub', id: 'g-us-tw', volume: 76045198 });
-    list.push({ source: 'USA Hub', target: 'United Kingdom', id: 'g-us-uk', volume: 63507363 });
-    list.push({ source: 'USA Hub', target: 'Japan', id: 'g-us-jp', volume: 36954828 });
-    list.push({ source: 'USA Hub', target: 'India', id: 'g-us-in', volume: 112546350 });
-    list.push({ source: 'USA Hub', target: 'Germany', id: 'g-us-de', volume: 38322400 });
+    // USA EXPORTS (The Truth - Converted KL to BBL)
+    list.push({ source: 'USA Hub', target: 'South Korea', id: 'g-us-sk', volume: 176208062 * BBL_CONV });
+    list.push({ source: 'USA Hub', target: 'Mainland China', id: 'g-us-cn', volume: 8148860 * BBL_CONV });
+    list.push({ source: 'USA Hub', target: 'Canada', id: 'g-us-ca', volume: 92472582 * BBL_CONV });
+    list.push({ source: 'USA Hub', target: 'Netherlands Hub', id: 'g-us-nl', volume: 306952849 * BBL_CONV });
+    list.push({ source: 'USA Hub', target: 'Taiwan Hub', id: 'g-us-tw', volume: 76045198 * BBL_CONV });
+    list.push({ source: 'USA Hub', target: 'United Kingdom', id: 'g-us-uk', volume: 63507363 * BBL_CONV });
+    list.push({ source: 'USA Hub', target: 'Japan', id: 'g-us-jp', volume: 36954828 * BBL_CONV });
+    list.push({ source: 'USA Hub', target: 'India', id: 'g-us-in', volume: 112546350 * BBL_CONV });
+    list.push({ source: 'USA Hub', target: 'Germany', id: 'g-us-de', volume: 38322400 * BBL_CONV });
 
-    // MIDDLE EAST STRATEGIC IMPORTS
-    list.push({ source: 'Saudi Arabia', target: 'Japan', id: 'g-sa-jp', volume: 6000375 });
-    list.push({ source: 'UAE', target: 'Japan', id: 'g-uae-jp', volume: 1415982 });
-    list.push({ source: 'Kuwait', target: 'South Korea', id: 'g-ku-sk', volume: 1200000 });
-    list.push({ source: 'Kuwait', target: 'Japan', id: 'g-ku-jp', volume: 611905 });
+    // STRATEGIC ARTERIES (Converted KL to BBL)
+    list.push({ source: 'Saudi Arabia', target: 'Japan', id: 'g-sa-jp', volume: 6000375 * BBL_CONV });
+    list.push({ source: 'UAE', target: 'Japan', id: 'g-uae-jp', volume: 1415982 * BBL_CONV });
+    list.push({ source: 'Kuwait', target: 'South Korea', id: 'g-ku-sk', volume: 1200000 * BBL_CONV });
+    list.push({ source: 'Russia Kozmino', target: 'Mainland China', id: 'g-ru-cn', volume: 1200800 * BBL_CONV });
 
     return list;
   }, []);
@@ -163,7 +127,7 @@ const App: React.FC = () => {
         const base = d.source === 'Brazil Hub' ? [0, 155, 72] : d.source === 'Iran Hub' ? [0, 100, 255] : d.source === 'USA Hub' ? [0, 82, 155] : COLOR_CRIMSON;
         return [...base, active ? 80 : 10];
       },
-      getWidth: (d: any) => Math.max(1, Math.log10(d.volume) - 4.5) * 2.5,
+      getWidth: (d: any) => Math.max(1, Math.log10(d.volume) - 5) * 3,
     }),
     new TextLayer({
       id: 'global-labels',
@@ -171,7 +135,7 @@ const App: React.FC = () => {
       getPosition: (d: any) => d.coordinates,
       getText: (d: any) => d.name,
       getSize: (d: any) => d.isHub ? 16 : 10,
-      getColor: [255, 255, 255, 200],
+      getColor: [255, 255, 255, 180],
       getAlignmentBaseline: 'bottom',
       onHover: (info: any) => setHoveredNode(info.object?.name || null),
       pickable: true
@@ -203,7 +167,7 @@ const App: React.FC = () => {
               </div>
               <div>
                 <div className="text-[10px] text-white/40 uppercase tracking-widest font-bold">Total Strategic Flux</div>
-                <div className="text-lg font-black font-mono">{(totalStrategicVolume / 1000000).toFixed(1)}M <span className="text-xs text-white/30 font-normal">KL</span></div>
+                <div className="text-lg font-black font-mono">{(totalStrategicVolume / 1000000).toFixed(1)}M <span className="text-xs text-white/30 font-normal uppercase">BBL</span></div>
               </div>
             </div>
           </section>
@@ -224,8 +188,7 @@ const App: React.FC = () => {
 
         <div className="mt-auto pt-8 border-t border-white/5 space-y-4">
           <div className="flex items-center gap-4 bg-[#BC002D]/5 p-4 border border-[#BC002D]/20 rounded-sm">
-             <Droplets className="w-4 h-4 text-[#BC002D] animate-pulse" />
-             <div className="text-[9px] uppercase tracking-widest text-[#BC002D] font-black">System Ready: Strategic Data Lock</div>
+             <div className="text-[9px] uppercase tracking-widest text-[#BC002D] font-black animate-pulse">Unit Locked: Barrels (BBL)</div>
           </div>
         </div>
       </div>
@@ -238,7 +201,7 @@ const App: React.FC = () => {
              <span className="text-[10px] font-black tracking-[2px] uppercase">Mission Live</span>
            </div>
            <div className="w-px h-3 bg-white/20" />
-           <span className="text-[10px] font-mono text-white/40 uppercase">UTC+9 / 17:36:20</span>
+           <span className="text-[10px] font-mono text-white/40 uppercase">UTC+9 / GLOBAL_MONITOR</span>
         </div>
       </div>
 
@@ -246,15 +209,15 @@ const App: React.FC = () => {
       <div className="absolute bottom-8 right-8 z-10 flex gap-8 bg-black/20 backdrop-blur-md p-6 border border-white/5 rounded-sm">
          <div className="flex items-center gap-2">
            <div className="w-4 h-0.5 bg-[#00529B] shadow-[0_0_8px_#00529B]" />
-           <span className="text-[9px] uppercase tracking-widest text-white/40">USA Hub Channels</span>
+           <span className="text-[9px] uppercase tracking-widest text-white/40 font-bold">USA Channels</span>
          </div>
          <div className="flex items-center gap-2">
            <div className="w-4 h-0.5 bg-[#009B48] shadow-[0_0_8px_#009B48]" />
-           <span className="text-[9px] uppercase tracking-widest text-white/40">Brazil Hub Channels</span>
+           <span className="text-[9px] uppercase tracking-widest text-white/40 font-bold">Brazil Channels</span>
          </div>
          <div className="flex items-center gap-2">
            <div className="w-4 h-0.5 bg-[#BC002D] shadow-[0_0_8px_#BC002D]" />
-           <span className="text-[9px] uppercase tracking-widest text-white/40">Pacific Strategic Flux</span>
+           <span className="text-[9px] uppercase tracking-widest text-white/40 font-bold">Pacific Strategic Flux</span>
          </div>
       </div>
     </div>
